@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pub Crawl — Daily Trivia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Karla:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#140d0a;
+    --bg2:#1e130d;
+    --border-blue:#2c5c8f;
+    --panel:#0d2340;
+    --panel-border:#1d4e8f;
+    --panel-border-light:#2c6bb0;
+    --red:#c81e3a;
+    --red-neon:#ff3b5c;
+    --red-glow:rgba(255,59,92,0.55);
+    --blue:#2472e8;
+    --blue-neon:#5aa9ff;
+    --blue-glow:rgba(90,169,255,0.55);
+    --blue-dark:#08213f;
+    --teal:#22c55e;
+    --cream:#f6ead4;
+    --tan:#cbb89d;
+    --ink:#0d0805;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at 30% -10%, rgba(36,114,232,0.18), transparent 55%),
+      radial-gradient(ellipse at 78% -5%, rgba(34,197,94,0.12), transparent 55%),
+      repeating-linear-gradient(90deg, var(--bg) 0px, var(--bg) 38px, #170f0b 38px, #170f0b 40px);
+    color:var(--cream);
+    font-family:'Karla', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:24px 12px 60px;
+  }
+  #app{ width:100%; max-width:640px; }
+  .hidden{ display:none !important; }
+  h1,h2,h3{ font-family:'Bungee', cursive; font-weight:400; margin:0; }
+  button{ font-family:'Karla', sans-serif; cursor:pointer; }
+
+  /* ---------- Neon title ---------- */
+  .neon-wrap{ text-align:center; padding:18px 0 6px; }
+  .mugs{ font-size:38px; letter-spacing:14px; margin-bottom:6px; filter:drop-shadow(0 0 6px rgba(255,183,3,0.5)); }
+  .neon-title{
+    font-size:clamp(34px,9vw,58px);
+    color:var(--blue-neon);
+    text-shadow:
+      0 0 6px var(--blue-glow),
+      0 0 18px var(--blue-glow),
+      0 0 34px rgba(90,169,255,0.35),
+      0 0 46px rgba(34,197,94,0.25);
+    animation: flicker 4.5s infinite;
+    letter-spacing:2px;
+  }
+  @keyframes flicker{
+    0%,18%,22%,25%,53%,57%,100%{ opacity:1; }
+    20%,24%,55%{ opacity:0.55; }
+  }
+  .tagline{ color:var(--tan); font-size:14px; letter-spacing:3px; text-transform:uppercase; margin-top:4px; }
+  .day-badge{
+    display:inline-block; margin-top:14px; background:var(--blue-neon); color:var(--blue-dark);
+    font-family:'Space Mono',monospace; font-weight:700; font-size:13px;
+    padding:4px 14px; border-radius:3px; transform:rotate(-2deg);
+    box-shadow:0 2px 0 rgba(0,0,0,0.35);
+  }
+
+  /* ---------- Chalkboard lineup ---------- */
+  .chalkboard{
+    background:var(--panel); border:6px solid var(--panel-border); border-radius:8px;
+    margin:22px 0; padding:16px 18px;
+  }
+  .chalkboard .label{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--tan); margin-bottom:8px; }
+  .chalk-icons{ font-size:26px; letter-spacing:10px; }
+  .rules{ font-size:14px; line-height:1.7; color:var(--tan); margin-top:12px; }
+  .rules b{ color:var(--cream); }
+  .lineup-row{ display:flex; justify-content:space-between; font-size:14px; padding:6px 2px; border-bottom:1px dashed var(--border-blue); }
+  .lineup-row span:first-child{ color:var(--tan); }
+  .lineup-row span:last-child{ color:var(--cream); font-weight:700; }
+  .cat-banner{ text-align:center; font-family:'Bungee'; font-size:20px; color:var(--cream); margin:4px 0 14px; }
+  .cat-banner .ic{ font-size:30px; display:block; margin-bottom:4px; }
+
+  /* ---------- Buttons ---------- */
+  .btn-tap{
+    display:block; width:100%; text-align:center; border:none; border-radius:6px;
+    background:var(--blue); color:var(--cream); font-family:'Bungee'; font-size:18px;
+    padding:16px; margin-top:18px; box-shadow:0 4px 0 #123f85, 0 0 20px rgba(36,114,232,0.35);
+  }
+  .btn-tap:active{ transform:translateY(3px); box-shadow:0 1px 0 #123f85; }
+  .btn-secondary{
+    border:2px solid var(--border-blue); background:transparent; color:var(--cream);
+    border-radius:6px; padding:10px 14px; font-size:14px; font-weight:700;
+  }
+  .btn-secondary:hover{ border-color:var(--blue-neon); color:var(--blue-neon); }
+  .btn-row{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+
+  /* ---------- Round header ---------- */
+  .round-header{ text-align:center; margin:6px 0 16px; }
+  .round-header .plank{
+    display:inline-block; background:var(--blue-neon); border-bottom:3px solid var(--blue);
+    padding:8px 22px; border-radius:4px; font-family:'Bungee'; font-size:15px;
+    letter-spacing:1px; color:var(--blue-dark);
+  }
+  .score-strip{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'Space Mono',monospace; font-size:13px; color:var(--tan); margin:10px 2px 4px;
+  }
+  .score-strip .val{ color:var(--blue-neon); font-weight:700; }
+
+  /* ---------- Board grid ---------- */
+  .board{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  /* ---------- Question ticket ---------- */
+  .ticket{
+    background:var(--panel); border:2px dashed var(--panel-border-light); border-radius:8px;
+    padding:20px; margin-top:16px;
+  }
+  .ticket .pts-tag{
+    display:inline-block; background:var(--blue-neon); color:var(--blue-dark); font-family:'Space Mono';
+    font-weight:700; font-size:13px; padding:2px 10px; border-radius:3px; margin-bottom:10px;
+  }
+  .ticket .qtext{ font-size:17px; line-height:1.5; margin-bottom:16px; }
+  .confidence-label{ font-size:13px; color:var(--tan); margin-bottom:8px; }
+  .value-row{ display:flex; gap:8px; }
+  .value-btn{
+    flex:1; padding:12px; border:2px solid var(--border-blue); background:var(--bg);
+    color:var(--cream); border-radius:6px; font-family:'Space Mono',monospace; font-weight:700; font-size:15px;
+  }
+  .value-btn:hover{ border-color:var(--blue-neon); }
+  .value-btn.selected{ border-color:var(--blue-neon); background:var(--blue-dark); color:var(--blue-neon); }
+  .opt-btn{
+    display:block; width:100%; text-align:left; background:var(--bg); border:2px solid var(--border-blue);
+    color:var(--cream); border-radius:6px; padding:12px 14px; margin-bottom:8px; font-size:15px;
+  }
+  .opt-btn:hover{ border-color:var(--blue-neon); }
+  .opt-btn.correct{ border-color:var(--teal); background:#0f2e29; color:var(--teal); }
+  .opt-btn.wrong{ border-color:var(--red); background:#2e0f16; color:var(--red-neon); }
+  .opt-btn:disabled{ cursor:default; }
+  .num-row{ display:flex; gap:10px; align-items:center; }
+  .num-row input{
+    flex:1; background:var(--bg); border:2px solid var(--border-blue); color:var(--cream);
+    font-family:'Space Mono'; font-size:16px; padding:10px 12px; border-radius:6px;
+  }
+  .result-box{ margin-top:14px; padding:12px 14px; border-radius:6px; font-size:14px; line-height:1.6; }
+  .result-box.right{ background:#0f2e29; border:1px solid var(--teal); color:var(--cream); }
+  .result-box.wrong{ background:#2e0f16; border:1px solid var(--red); color:var(--cream); }
+  .fact{ color:var(--tan); margin-top:6px; }
+  .err{ color:var(--red-neon); font-size:13px; margin-top:6px; }
+
+  /* ---------- Finale ---------- */
+  .finale-badge{
+    text-align:center; font-family:'Bungee'; color:var(--blue-neon); font-size:15px;
+    letter-spacing:2px; text-transform:uppercase; margin-bottom:6px;
+  }
+  .wager-total{ text-align:center; font-family:'Space Mono'; font-size:15px; color:var(--tan); margin-bottom:14px; }
+  .wager-total b{ color:var(--blue-neon); font-size:20px; }
+  .wager-row{ display:flex; gap:10px; align-items:center; margin:14px 0; }
+  .wager-row input[type=number]{
+    flex:1; background:var(--bg); border:2px solid var(--border-blue); color:var(--cream);
+    font-family:'Space Mono'; font-size:18px; padding:10px; border-radius:6px; text-align:center;
+  }
+  .finale-inputs{ display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+  .finale-input{
+    background:var(--bg); border:2px solid var(--border-blue); color:var(--cream);
+    font-family:'Karla',sans-serif; font-size:15px; padding:10px 12px; border-radius:6px;
+  }
+  .finale-input.correct{ border-color:var(--teal); background:#0f2e29; color:var(--teal); }
+  .finale-input.wrong{ border-color:var(--red); background:#2e0f16; color:var(--red-neon); }
+  .quick-bets{ display:flex; gap:8px; margin-bottom:6px; }
+  .quick-bets button{ flex:1; }
+
+  /* ---------- Receipt / tab ---------- */
+  .receipt{
+    background:#faf6ec; color:#241611; font-family:'Space Mono', monospace; font-size:13px;
+    padding:20px 22px 26px; border-radius:2px; line-height:1.8;
+    box-shadow:0 10px 30px rgba(0,0,0,0.45);
+    background-image: repeating-linear-gradient(-90deg, transparent, transparent 9px, rgba(0,0,0,0.04) 9px, rgba(0,0,0,0.04) 10px);
+    -webkit-mask-image: linear-gradient(#000 96%, transparent 100%),
+      repeating-linear-gradient(90deg, #000 0 8px, transparent 8px 12px);
+  }
+  .receipt-head{ text-align:center; font-family:'Bungee'; font-size:18px; color:#1d5fc2; margin-bottom:2px; }
+  .receipt-sub{ text-align:center; font-size:11px; letter-spacing:2px; margin-bottom:14px; }
+  .receipt-line{ display:flex; justify-content:space-between; border-bottom:1px dashed #b7ac97; padding:4px 0; }
+  .receipt-total{ display:flex; justify-content:space-between; font-weight:700; font-size:16px; margin-top:10px; padding-top:8px; border-top:2px solid #241611; }
+  .receipt-tag{ text-align:center; margin-top:14px; font-size:12px; font-style:italic; }
+  .copy-flash{ text-align:center; font-size:13px; color:var(--teal); margin-top:8px; height:16px; }
+  textarea#share-fallback{
+    width:100%; margin-top:10px; background:var(--bg2); color:var(--tan); border:1px solid var(--border-blue);
+    border-radius:6px; padding:10px; font-family:'Space Mono'; font-size:12px;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+var CATEGORIES = {
+  sports: { name:"Sports", icon:"🏆",
+    tierA:[
+      {pts:2, type:"mc", q:"This Grand Slam is the only one played on clay, held each spring in Paris.", options:["French Open","Wimbledon","US Open","Australian Open"], answer:0, fact:"It's also called Roland Garros, after the stadium's namesake — a WWI aviator, not a tennis player."},
+      {pts:4, type:"mc", q:"This NBA guard was drafted 13th overall in 1996 by the Charlotte Hornets, then traded to the Lakers that same night.", options:["Kobe Bryant","Allen Iverson","Ray Allen","Steve Nash"], answer:0, fact:"The Hornets got Vlade Divac in return — a trade that didn't age well for Charlotte."},
+      {pts:6, type:"num", q:"In what year did the U.S. hockey team's Olympic upset of the Soviets, the \"Miracle on Ice,\" take place?", answer:1980, leeway:1, fact:"The U.S. team was made up of college players facing a Soviet squad considered the best in the world."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This tennis player completed a rare calendar-year Golden Slam in 1988 — all four majors plus Olympic gold.", options:["Martina Navratilova","Steffi Graf","Chris Evert","Monica Seles"], answer:1, fact:"No other player, male or female, has matched that exact feat since."},
+      {pts:6, type:"num", q:"How many minutes long is a regulation international rugby union match, split into two even halves?", answer:80, leeway:5, fact:"That's two 40-minute halves, plus any stoppage time added on."},
+      {pts:9, type:"mc", q:"This tennis player holds the record for most Grand Slam singles titles of all time (24), a mark set decades before Serena Williams came close.", options:["Chris Evert","Margaret Court","Martina Navratilova","Billie Jean King"], answer:1, fact:"Many of her titles came at the Australian Championships, which drew a much smaller international field back then."}
+    ],
+    finale:{
+      prompt:"Name 3 of the 4 NFL teams that have never made a Super Bowl appearance.",
+      need:3, total:4,
+      answers:[["Cleveland Browns","Browns"],["Detroit Lions","Lions"],["Houston Texans","Texans"],["Jacksonville Jaguars","Jaguars"]],
+      fact:"The Texans and Jaguars are both expansion teams from the late '90s/early 2000s; the Browns and Lions are historic franchises that just haven't gotten there yet."
+    }
+  },
+  history: { name:"History", icon:"🏛️",
+    tierA:[
+      {pts:2, type:"mc", q:"This 1804 legal code, still shaping civil law in many countries today, was commissioned by a French emperor.", options:["Napoleonic Code","Justinian Code","Magna Carta","Code of Hammurabi"], answer:0, fact:"Napoleon considered it his greatest achievement, more lasting than any of his military victories."},
+      {pts:4, type:"mc", q:"This U.S. president is the only one in history to serve two non-consecutive terms, making him both the 22nd and 24th president.", options:["Martin Van Buren","Grover Cleveland","Andrew Johnson","Chester Arthur"], answer:1, fact:"Donald Trump became the second president to pull off the same feat, in 2025."},
+      {pts:6, type:"num", q:"In what year did World War II end?", answer:1945, leeway:1, fact:"V-E Day came in May; Japan didn't formally surrender until September."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This Byzantine emperor commissioned the Hagia Sophia and a sweeping legal code that still underpins civil law in many countries today.", options:["Constantine I","Justinian I","Theodosius I","Basil II"], answer:1, fact:"His code, the Corpus Juris Civilis, was compiled by legal scholars in just a few years despite its massive scope."},
+      {pts:6, type:"num", q:"In what year did the Berlin Wall fall, ending nearly three decades of dividing East and West Germany?", answer:1989, leeway:1, fact:"Crowds began tearing it down with hammers before the government had even finished the paperwork."},
+      {pts:9, type:"mc", q:"This 1648 treaty ended the Thirty Years' War and is often cited as the origin of the modern nation-state system.", options:["Treaty of Utrecht","Treaty of Westphalia","Treaty of Tordesillas","Peace of Augsburg"], answer:1, fact:"It's actually a set of treaties signed in two different cities, Osnabrück and Münster."}
+    ],
+    finale:{
+      prompt:"Name 4 of the 7 Wonders of the Ancient World.",
+      need:4, total:7,
+      answers:[["Great Pyramid of Giza","Pyramid of Giza","Great Pyramid"],["Hanging Gardens of Babylon","Hanging Gardens"],["Statue of Zeus at Olympia","Statue of Zeus"],["Temple of Artemis at Ephesus","Temple of Artemis"],["Mausoleum at Halicarnassus","Mausoleum of Halicarnassus"],["Colossus of Rhodes"],["Lighthouse of Alexandria","Pharos of Alexandria"]],
+      fact:"The Great Pyramid is the only one of the seven still standing today."
+    }
+  },
+  music: { name:"Music", icon:"🎸",
+    tierA:[
+      {pts:2, type:"mc", q:"This band's 1975 hit \"Bohemian Rhapsody\" famously skips a chorus, blending opera, ballad, and hard rock sections instead.", options:["Led Zeppelin","Queen","Pink Floyd","The Who"], answer:1, fact:"It was considered too long and strange for radio, but became a UK Christmas No. 1 anyway."},
+      {pts:4, type:"mc", q:"This guitarist, who died at 27, is known for \"Purple Haze\" and famously set his guitar on fire onstage at a 1967 festival.", options:["Eric Clapton","Jimi Hendrix","Jimmy Page","Carlos Santana"], answer:1, fact:"That festival was the Monterey Pop Festival, his first major U.S. performance."},
+      {pts:6, type:"num", q:"In what year did Live Aid, the dual-venue benefit concert held in London and Philadelphia, take place?", answer:1985, leeway:1, fact:"It's estimated nearly two billion people watched the broadcast worldwide."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This Baroque composer wrote \"The Four Seasons,\" a set of four violin concertos, in early 18th-century Venice.", options:["Johann Sebastian Bach","Antonio Vivaldi","George Frideric Handel","Franz Joseph Haydn"], answer:1, fact:"He was also an ordained Catholic priest, earning the nickname \"the Red Priest\" for his hair color."},
+      {pts:6, type:"num", q:"In what year did MTV, the network that changed how music videos were consumed, first go on air?", answer:1981, leeway:1, fact:"The very first video it aired was, fittingly, \"Video Killed the Radio Star.\""},
+      {pts:9, type:"mc", q:"Known for his puffed-out cheeks and bent-bell trumpet, this bebop pioneer helped revolutionize jazz in the 1940s alongside Charlie Parker.", options:["Miles Davis","Dizzy Gillespie","Thelonious Monk","Duke Ellington"], answer:1, fact:"His trumpet's bent bell was reportedly the accidental result of someone falling on it at a party — and he liked the sound so much he kept it."}
+    ],
+    finale:{
+      prompt:"Name 4 of the 7 musicians most commonly cited as members of the \"27 Club\" — artists who all died at age 27.",
+      need:4, total:7,
+      answers:[["Robert Johnson"],["Brian Jones"],["Jimi Hendrix"],["Janis Joplin"],["Jim Morrison"],["Kurt Cobain"],["Amy Winehouse"]],
+      fact:"The term became especially widespread after Kurt Cobain's death in 1994, decades after Hendrix, Joplin, and Morrison all died at the same age within about a year of each other."
+    }
+  },
+  movies: { name:"Movies", icon:"🎬",
+    tierA:[
+      {pts:2, type:"mc", q:"This 1994 Quentin Tarantino film tells its crime story out of order and features a famous dance scene set to Chuck Berry.", options:["Reservoir Dogs","Pulp Fiction","Kill Bill","Jackie Brown"], answer:1, fact:"That dance scene, between John Travolta and Uma Thurman, was largely improvised."},
+      {pts:4, type:"mc", q:"This 1995 crime film's twist ending reveals that its rambling, unreliable narrator has invented much of the story he just told police.", options:["Se7en","The Usual Suspects","Fight Club","Memento"], answer:1, fact:"The character's cane, coffee cup, and office wall props were reportedly all just invented on the spot as he talked."},
+      {pts:6, type:"num", q:"In what year did the original \"Jurassic Park\" release in theaters?", answer:1993, leeway:1, fact:"Its dinosaur roars were built partly from recordings of tortoises mating."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This 1980 Stanley Kubrick horror film, based on a Stephen King novel, is set at the isolated Overlook Hotel.", options:["Rosemary's Baby","The Shining","The Exorcist","Poltergeist"], answer:1, fact:"King has said he dislikes the adaptation, feeling it strayed too far from his book."},
+      {pts:6, type:"num", q:"In what year did the black-and-white classic \"Casablanca\" release?", answer:1942, leeway:2, fact:"Its famous line \"Play it again, Sam\" is never actually said word-for-word in the film."},
+      {pts:9, type:"mc", q:"This 1997 crime film, directed by Curtis Hanson and based on a James Ellroy novel, follows corrupt LAPD officers in 1950s Los Angeles.", options:["Chinatown","L.A. Confidential","Training Day","Zodiac"], answer:1, fact:"It won an Oscar for its screenplay but famously lost Best Picture to \"Titanic.\""}
+    ],
+    finale:{
+      prompt:"Name 5 of the 9 numbered episodes in the main Star Wars saga.",
+      need:5, total:9,
+      answers:[["The Phantom Menace","Phantom Menace"],["Attack of the Clones"],["Revenge of the Sith"],["A New Hope","Star Wars: A New Hope"],["The Empire Strikes Back","Empire Strikes Back"],["Return of the Jedi"],["The Force Awakens"],["The Last Jedi"],["The Rise of Skywalker"]],
+      fact:"The saga was released wildly out of order — Episodes IV-VI first, then I-III, then VII-IX."
+    }
+  },
+  tv: { name:"TV", icon:"📺",
+    tierA:[
+      {pts:2, type:"mc", q:"This crime drama, set in Baltimore, is often called one of the greatest TV shows ever for its portrayal of the drug trade and city institutions.", options:["The Shield","The Wire","Oz","Boardwalk Empire"], answer:1, fact:"It never won a single major Emmy during its original run, despite its later critical reputation."},
+      {pts:4, type:"mc", q:"This medical drama, originally set at Seattle Grace Hospital, has run for over 20 seasons and was created by Shonda Rhimes.", options:["ER","Grey's Anatomy","House","Scrubs"], answer:1, fact:"It's launched several spin-offs, including \"Private Practice\" and \"Station 19.\""},
+      {pts:6, type:"num", q:"How many seasons did the original U.S. version of \"The Office\" run for?", answer:9, leeway:0, fact:"Steve Carell left after season 7 but the show continued for two more seasons without him."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This British costume drama follows the Crawley family and their servants at a Yorkshire estate in the early 20th century.", options:["Bridgerton","Downton Abbey","The Crown","Poldark"], answer:1, fact:"Its filming location, Highclere Castle, saw a huge spike in tourism after the show aired."},
+      {pts:6, type:"num", q:"In what year did \"Seinfeld,\" the show \"about nothing,\" first premiere?", answer:1989, leeway:1, fact:"It almost got cancelled after its first, poorly-rated season."},
+      {pts:9, type:"mc", q:"In this British sci-fi series, a time-traveling alien periodically \"regenerates\" into a new actor, and flies a ship called the TARDIS.", options:["Star Trek","Doctor Who","Stargate SG-1","Red Dwarf"], answer:1, fact:"It first aired in 1963, the day after JFK was assassinated."}
+    ],
+    finale:{
+      prompt:"Name 5 of the 6 main friends in the sitcom \"Friends.\"",
+      need:5, total:6,
+      answers:[["Ross","Ross Geller"],["Rachel","Rachel Green"],["Monica","Monica Geller"],["Chandler","Chandler Bing"],["Joey","Joey Tribbiani"],["Phoebe","Phoebe Buffay"]],
+      fact:"The cast famously negotiated as a group to each earn $1 million per episode by the show's final seasons."
+    }
+  },
+  literature: { name:"Literature", icon:"📖",
+    tierA:[
+      {pts:2, type:"mc", q:"This dystopian novel by Aldous Huxley imagines a future society controlled through pleasure, conditioning, and a drug called soma.", options:["1984","Brave New World","Fahrenheit 451","We"], answer:1, fact:"Huxley wrote it as a response to what he saw as overly optimistic science-fiction utopias of his time."},
+      {pts:4, type:"mc", q:"This Russian author wrote the sprawling novels \"War and Peace\" and \"Anna Karenina.\"", options:["Fyodor Dostoevsky","Leo Tolstoy","Anton Chekhov","Ivan Turgenev"], answer:1, fact:"\"War and Peace\" is so long that it's become shorthand in English for any exceptionally lengthy read."},
+      {pts:6, type:"num", q:"How many novels make up J.R.R. Tolkien's original \"The Lord of the Rings\" trilogy?", answer:3, leeway:0, fact:"Tolkien wanted it published as one book, but paper shortages split it into three."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This Colombian author pioneered magical realism in his novel \"One Hundred Years of Solitude.\"", options:["Jorge Luis Borges","Gabriel García Márquez","Mario Vargas Llosa","Isabel Allende"], answer:1, fact:"He won the Nobel Prize in Literature in 1982."},
+      {pts:6, type:"num", q:"In what year was Mary Shelley's \"Frankenstein\" first published?", answer:1818, leeway:2, fact:"She wrote much of it at just 18 years old, as part of a ghost-story challenge with friends."},
+      {pts:9, type:"mc", q:"This modernist novel by James Joyce follows a single day in Dublin, loosely mirroring the structure of Homer's Odyssey.", options:["Dubliners","Ulysses","A Portrait of the Artist as a Young Man","Finnegans Wake"], answer:1, fact:"Fans now celebrate that single day, June 16th, every year as \"Bloomsday.\""}
+    ],
+    finale:{
+      prompt:"Name 4 of the 7 Harry Potter book titles.",
+      need:4, total:7,
+      answers:[["Philosopher's Stone","Sorcerer's Stone","Harry Potter and the Philosopher's Stone","Harry Potter and the Sorcerer's Stone"],["Chamber of Secrets"],["Prisoner of Azkaban"],["Goblet of Fire"],["Order of the Phoenix"],["Half-Blood Prince"],["Deathly Hallows"]],
+      fact:"The first book was retitled \"Sorcerer's Stone\" for the U.S. market — publishers worried American kids wouldn't know what a philosopher was."
+    }
+  },
+  geography: { name:"Geography", icon:"🌍",
+    tierA:[
+      {pts:2, type:"mc", q:"This country shares Victoria Falls, one of the world's largest waterfalls, with Zimbabwe.", options:["Zambia","Botswana","Malawi","Mozambique"], answer:0, fact:"Locally it's called \"Mosi-oa-Tunya\" — \"the smoke that thunders.\""},
+      {pts:4, type:"mc", q:"This strait separates Europe from Africa at its narrowest point, just 13 km wide, linking the Atlantic to the Mediterranean.", options:["Strait of Hormuz","Strait of Gibraltar","Bosphorus Strait","Strait of Dover"], answer:1, fact:"On a clear day, you can actually see one continent from the other across it."},
+      {pts:6, type:"num", q:"How many countries share a land border with Brazil, the largest nation in South America?", answer:10, leeway:1, fact:"That's every South American country except Chile and Ecuador."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This East Asian country shares land borders with 14 different neighboring countries — more than any nation except Russia.", options:["India","China","Mongolia","Kazakhstan"], answer:1, fact:"Its land border alone stretches over 22,000 kilometers, roughly half the Earth's circumference."},
+      {pts:6, type:"num", q:"How many time zones does the continental United States (excluding territories) officially span?", answer:4, leeway:0, fact:"Add Alaska and Hawaii and the number climbs to 6 for the states alone."},
+      {pts:9, type:"mc", q:"Measured from base to peak rather than sea level, this mountain in Hawaii is actually taller than Mount Everest.", options:["Mauna Loa","Mauna Kea","Denali","Kilimanjaro"], answer:1, fact:"Most of its height, over 6,000 meters of it, is hidden underwater."}
+    ],
+    finale:{
+      prompt:"Name 5 of the top 10 corn-producing states in the US.",
+      need:5, total:10,
+      answers:[["Iowa"],["Illinois"],["Nebraska"],["Minnesota"],["Indiana"],["Kansas"],["South Dakota"],["Ohio"],["Missouri"],["Wisconsin"]],
+      fact:"Iowa alone produces roughly a quarter of all corn grown in the US, more than double any other state."
+    }
+  },
+  general: { name:"General Knowledge", icon:"🧠",
+    tierA:[
+      {pts:2, type:"mc", q:"This is the only mammal capable of sustained, true flight, as opposed to just gliding.", options:["Flying squirrel","Bat","Colugo","Sugar glider"], answer:1, fact:"Its wing is really a modified hand, with skin stretched between elongated finger bones."},
+      {pts:4, type:"mc", q:"Besides mercury, this is the only other element that exists as a liquid at standard room temperature.", options:["Gallium","Bromine","Cesium","Rubidium"], answer:1, fact:"It's also the only nonmetal that's liquid at room temperature — and it has a famously sharp, choking smell."},
+      {pts:6, type:"num", q:"Counting outlying territories like Guam and Samoa, how many time zones does the United States officially observe?", answer:11, leeway:1, fact:"That's nearly a third of all time zones on Earth claimed by one country."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This is the only country in the world whose national flag is not a rectangle or square.", options:["Bhutan","Nepal","Bangladesh","Sri Lanka"], answer:1, fact:"Its flag is actually two stacked triangular pennants, based on royal banners once flown by rival princes."},
+      {pts:6, type:"num", q:"How many chambers does the human heart have?", answer:4, leeway:0, fact:"Two atria on top, two ventricles below — one pair for each side of the body's circulation."},
+      {pts:9, type:"mc", q:"This is the only planet in our solar system that rotates on its side, tilted at roughly 98 degrees.", options:["Neptune","Uranus","Venus","Saturn"], answer:1, fact:"One theory says an ancient collision with an Earth-sized object knocked it over."}
+    ],
+    finale:{
+      prompt:"Name 5 of the 8 planets in our solar system.",
+      need:5, total:8,
+      answers:[["Mercury"],["Venus"],["Earth"],["Mars"],["Jupiter"],["Saturn"],["Uranus"],["Neptune"]],
+      fact:"Pluto was reclassified as a \"dwarf planet\" in 2006, bringing the official count down from nine to eight."
+    }
+  },
+  business: { name:"Business", icon:"💼",
+    tierA:[
+      {pts:2, type:"mc", q:"This Swedish company is known worldwide for flat-pack furniture and Scandinavian-named products.", options:["H&M","IKEA","Ericsson","Volvo"], answer:1, fact:"Its name is an acronym of the founder's initials plus his family farm and hometown."},
+      {pts:4, type:"mc", q:"This company's name comes from a South American river, and its logo features a smile-shaped arrow running from A to Z.", options:["eBay","Amazon","Alibaba","Overstock"], answer:1, fact:"The arrow is meant to suggest the company sells everything from A to Z — and that customers smile."},
+      {pts:6, type:"num", q:"In what year did Netflix launch its streaming service, separate from its original DVD-by-mail business?", answer:2007, leeway:1, fact:"It took another decade before streaming fully overtook DVD rentals as its main business."}
+    ],
+    tierB:[
+      {pts:3, type:"mc", q:"This company began as a search-engine research project between two Stanford PhD students, originally nicknamed \"BackRub.\"", options:["Yahoo","Google","AltaVista","Ask Jeeves"], answer:1, fact:"They renamed it after \"googol,\" the number 1 followed by 100 zeros — then misspelled it."},
+      {pts:6, type:"num", q:"In what year did Steve Jobs return to Apple, the company he co-founded, after being ousted over a decade earlier?", answer:1997, leeway:1, fact:"His return came through Apple's acquisition of NeXT, the company he'd started after leaving."},
+      {pts:9, type:"mc", q:"This Finnish company dominated the global mobile phone market in the late 1990s and early 2000s before losing ground to smartphones.", options:["Ericsson","Nokia","Motorola","BlackBerry"], answer:1, fact:"At its peak it made roughly 4 out of every 10 mobile phones sold worldwide."}
+    ],
+    finale:{
+      prompt:"Name 4 of the 5 companies in the tech industry's \"FAANG\" acronym.",
+      need:4, total:5,
+      answers:[["Facebook","Meta"],["Apple"],["Amazon"],["Netflix"],["Google","Alphabet"]],
+      fact:"The term was coined by CNBC's Jim Cramer around 2013, before Facebook rebranded to Meta in 2021."
+    }
+  },
+  guesstheyear: { name:"Guess the Year", icon:"📅",
+    tierA:[
+      {pts:2, type:"num", q:"In what year did the first Apple iPhone go on sale?", answer:2007, leeway:1, fact:"Steve Jobs unveiled it as \"a widescreen iPod, a phone, and an internet communicator.\""},
+      {pts:4, type:"num", q:"In what year did YouTube first launch?", answer:2005, leeway:1, fact:"Its very first video, \"Me at the zoo,\" is still up today."},
+      {pts:6, type:"num", q:"In what year did the Chernobyl nuclear disaster occur?", answer:1986, leeway:1, fact:"The surrounding exclusion zone has since become an unlikely haven for wildlife."}
+    ],
+    tierB:[
+      {pts:3, type:"num", q:"In what year is the World Wide Web widely considered to have been invented by Tim Berners-Lee?", answer:1989, leeway:2, fact:"It didn't become publicly available outside CERN until the early '90s."},
+      {pts:6, type:"num", q:"In what year did the Soviet Union officially dissolve?", answer:1991, leeway:1, fact:"It broke apart into 15 separate countries."},
+      {pts:9, type:"num", q:"In what year did the Cuban Missile Crisis bring the U.S. and USSR to the brink of nuclear war?", answer:1962, leeway:1, fact:"It lasted just 13 tense days before a resolution was reached."}
+    ],
+    finale:{
+      prompt:"Name 5 of the 7 Summer Olympics host cities from 2000 to 2024.",
+      need:5, total:7,
+      answers:[["Sydney"],["Athens"],["Beijing"],["London"],["Rio de Janeiro","Rio"],["Tokyo"],["Paris"]],
+      fact:"Tokyo's 2020 Games were delayed a year by the pandemic and actually held in the summer of 2021, still branded \"Tokyo 2020.\""
+    }
+  }
+};
+
+var CATKEYS = Object.keys(CATEGORIES);
+
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function seededShuffle(arr, rng){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j = Math.floor(rng()*(i+1));
+    var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+  }
+  return a;
+}
+
+var today = new Date();
+var dateSeed = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
+var rng = mulberry32(dateSeed);
+var shuffledCats = seededShuffle(CATKEYS, rng);
+var LAUNCH = new Date(2026,7,18);
+var dayNumber = Math.max(0, Math.floor((today - LAUNCH)/86400000));
+
+var lineup = {
+  round1: shuffledCats[0],
+  round2: shuffledCats[1],
+  round3: shuffledCats[2],
+  finale: shuffledCats[3]
+};
+
+var ROUND_DEFS = [
+  {cat: lineup.round1, tier:"tierA", points:[2,4,6], label:"Round 1"},
+  {cat: lineup.round2, tier:"tierA", points:[2,4,6], label:"Round 2"},
+  {cat: lineup.round3, tier:"tierB", points:[3,6,9], label:"Round 3 — last orders get harder"}
+];
+
+var state = {
+  screen:"start",
+  roundIdx:0,
+  rounds:[{answered:{}},{answered:{}},{answered:{}}],
+  finale:{wager:0, locked:false, answered:false, correct:null, correctCount:0},
+  current:null
+};
+
+function baseScore(){
+  var s=0;
+  state.rounds.forEach(function(r){
+    Object.keys(r.answered).forEach(function(k){
+      var a=r.answered[k];
+      if(a.correct) s+=a.pts;
+    });
+  });
+  return s;
+}
+function totalScore(){
+  var s = baseScore();
+  if(state.finale.answered){
+    s += state.finale.correct ? state.finale.wager : -state.finale.wager;
+  }
+  return s;
+}
+function roundComplete(idx){
+  return Object.keys(state.rounds[idx].answered).length >= 3;
+}
+
+var app = document.getElementById("app");
+
+var pendingValue = null;
+
+function render(){
+  if(state.screen==="start") return renderStart();
+  if(state.screen==="question") return renderQuestion();
+  if(state.screen==="roundEnd") return renderRoundEnd();
+  if(state.screen==="finaleIntro") return renderFinaleIntro();
+  if(state.screen==="finaleQuestion") return renderFinaleQuestion();
+  if(state.screen==="end") return renderEnd();
+}
+
+function renderStart(){
+  var r1 = CATEGORIES[lineup.round1], r2 = CATEGORIES[lineup.round2], r3 = CATEGORIES[lineup.round3];
+  app.innerHTML =
+    '<div class="neon-wrap">'+
+      '<div class="mugs">🍺 🍻 🍺</div>'+
+      '<h1 class="neon-title">PUB CRAWL</h1>'+
+      '<div class="tagline">daily pub trivia</div>'+
+      '<div class="day-badge">DAY #'+dayNumber+'</div>'+
+    '</div>'+
+    '<div class="chalkboard">'+
+      '<div class="label">Tonight\'s lineup</div>'+
+      '<div class="lineup-row"><span>Round 1</span><span>'+r1.icon+' '+r1.name+'</span></div>'+
+      '<div class="lineup-row"><span>Round 2</span><span>'+r2.icon+' '+r2.name+'</span></div>'+
+      '<div class="lineup-row"><span>Round 3 (harder)</span><span>'+r3.icon+' '+r3.name+'</span></div>'+
+      '<div class="rules">'+
+        'Each round is one category, <b>3 questions</b> deep. Round 1 &amp; 2 are worth <b>2 / 4 / 6</b> points, Round 3 turns up the difficulty at <b>3 / 6 / 9</b>.<br>'+
+        'Then comes <b>Last Call</b> — a mystery category is revealed and you wager any amount of your points, even zero. Get it right, win your wager. Get it wrong, lose it.'+
+      '</div>'+
+    '</div>'+
+    '<button class="btn-tap" onclick="startGame()">Start the crawl 🍻</button>';
+}
+
+function startGame(){
+  openQuestion(0,0);
+}
+
+function openQuestion(roundIdx, qIndex){
+  var def = ROUND_DEFS[roundIdx];
+  var q = CATEGORIES[def.cat][def.tier][qIndex];
+  state.roundIdx = roundIdx;
+  state.current = {roundIdx:roundIdx, qIndex:qIndex, q:q, isFinale:false};
+  pendingValue = null;
+  state.screen="question";
+  render();
+}
+
+function questionBodyHTML(q, gated){
+  var dis = gated ? " disabled" : "";
+  if(q.type==="mc"){
+    var opts = q.options.map(function(opt,i){
+      return '<button class="opt-btn" id="opt'+i+'" onclick="submitMC('+i+')"'+dis+'>'+opt+'</button>';
+    }).join("");
+    return opts + '<div id="qresult"></div>';
+  }
+  return '<div class="num-row"><input type="number" id="numAns" placeholder="Your guess"'+dis+'><button class="btn-secondary" id="numSubmitBtn" onclick="submitNum()"'+dis+'>Submit guess</button></div>'+
+    '<div id="numErr" class="err"></div><div id="qresult"></div>';
+}
+
+function renderQuestion(){
+  var cur = state.current;
+  var q = cur.q;
+  var def = ROUND_DEFS[cur.roundIdx];
+  var cat = CATEGORIES[def.cat];
+  var r = state.rounds[cur.roundIdx];
+  var used = Object.keys(r.answered).map(function(k){ return r.answered[k].value; });
+  var remaining = def.points.filter(function(v){ return used.indexOf(v)===-1; });
+  var valueButtons = remaining.map(function(v){
+    return '<button class="value-btn" id="val'+v+'" onclick="chooseValue('+v+')">'+v+' pts</button>';
+  }).join("");
+  app.innerHTML =
+    '<div class="round-header"><span class="plank">'+def.label+' · Question '+(cur.qIndex+1)+' of 3</span></div>'+
+    '<div class="cat-banner"><span class="ic">'+cat.icon+'</span>'+cat.name+'</div>'+
+    '<div class="score-strip"><span>Your tab so far</span><span class="val">'+baseScore()+' pts</span></div>'+
+    '<div class="ticket">'+
+      '<div class="confidence-label">How many points do you want to put on this one?</div>'+
+      '<div class="value-row">'+valueButtons+'</div>'+
+      '<div id="valueErr" class="err"></div>'+
+      '<div class="qtext" style="margin-top:16px;">'+q.q+'</div>'+
+      questionBodyHTML(q, true)+
+    '</div>';
+}
+
+function chooseValue(v){
+  pendingValue = v;
+  var vb = document.getElementsByClassName("value-btn");
+  for(var i=0;i<vb.length;i++){ vb[i].classList.remove("selected"); }
+  var chosen = document.getElementById("val"+v);
+  if(chosen) chosen.classList.add("selected");
+  document.getElementById("valueErr").textContent = "";
+  var opts = document.getElementsByClassName("opt-btn");
+  for(var j=0;j<opts.length;j++){ opts[j].disabled = false; }
+  var numAns = document.getElementById("numAns");
+  if(numAns){
+    numAns.disabled = false;
+    document.getElementById("numSubmitBtn").disabled = false;
+  }
+}
+
+function factHTML(correct, correctText, fact, ptsNote){
+  var cls = correct ? "right" : "wrong";
+  var head = correct ? "Correct! 🍻" : ("Not quite — it was "+correctText+".");
+  var noteLine = ptsNote ? ('<div style="margin-top:4px; font-weight:700;">'+ptsNote+'</div>') : "";
+  return '<div class="result-box '+cls+'">'+head+noteLine+'<div class="fact">'+fact+'</div></div>'+
+    '<button class="btn-secondary" style="margin-top:12px;" onclick="afterQuestion()">Continue</button>';
+}
+
+function submitMC(i){
+  var cur = state.current, q=cur.q;
+  if(pendingValue===null){
+    document.getElementById("valueErr").textContent = "Choose a point value first.";
+    return;
+  }
+  var correct = (i===q.answer);
+  for(var k=0;k<q.options.length;k++){
+    var el = document.getElementById("opt"+k);
+    el.disabled = true;
+    if(k===q.answer) el.classList.add("correct");
+    else if(k===i) el.classList.add("wrong");
+  }
+  recordAnswer(correct);
+  var note = correct ? ("+"+pendingValue+" pts banked.") : ("You had "+pendingValue+" pts on this one — no points earned.");
+  document.getElementById("qresult").innerHTML = factHTML(correct, q.options[q.answer], q.fact, note);
+}
+
+function submitNum(){
+  var cur = state.current, q=cur.q;
+  if(pendingValue===null){
+    document.getElementById("valueErr").textContent = "Choose a point value first.";
+    return;
+  }
+  var val = document.getElementById("numAns").value;
+  if(val===""){
+    document.getElementById("numErr").textContent = "Enter a guess first.";
+    return;
+  }
+  document.getElementById("numErr").textContent = "";
+  var num = parseFloat(val);
+  var lee = (q.leeway||0);
+  var correct = Math.abs(num - q.answer) <= lee;
+  recordAnswer(correct);
+  document.getElementById("numAns").disabled = true;
+  document.getElementById("numSubmitBtn").disabled = true;
+  var note = correct ? ("+"+pendingValue+" pts banked.") : ("You had "+pendingValue+" pts on this one — no points earned.");
+  document.getElementById("qresult").innerHTML = factHTML(correct, String(q.answer), q.fact, note);
+}
+
+function recordAnswer(correct){
+  var cur = state.current;
+  var r = state.rounds[cur.roundIdx];
+  r.answered[cur.qIndex] = {value:pendingValue, correct:correct, pts:pendingValue};
+}
+
+function afterQuestion(){
+  var cur = state.current;
+  var idx = cur.roundIdx;
+  if(roundComplete(idx)){
+    state.screen="roundEnd";
+    render();
+    return;
+  }
+  var r = state.rounds[idx];
+  var nextQ = -1;
+  for(var i=0;i<3;i++){ if(!r.answered.hasOwnProperty(i)){ nextQ=i; break; } }
+  openQuestion(idx, nextQ);
+}
+
+function renderRoundEnd(){
+  var def = ROUND_DEFS[state.roundIdx];
+  var isLastRound = state.roundIdx===2;
+  var nextLabel = isLastRound ? "Head to Last Call →" : ("Continue to "+ROUND_DEFS[state.roundIdx+1].label+" →");
+  app.innerHTML =
+    '<div class="round-header"><span class="plank">'+def.label+' complete</span></div>'+
+    '<div class="chalkboard" style="text-align:center;">'+
+      '<div class="label">Running tab</div>'+
+      '<div style="font-family:\'Space Mono\'; font-size:32px; color:var(--blue-neon);">'+baseScore()+' pts</div>'+
+    '</div>'+
+    '<button class="btn-tap" onclick="advanceAfterRound()">'+nextLabel+'</button>';
+}
+
+function advanceAfterRound(){
+  if(state.roundIdx<2){
+    openQuestion(state.roundIdx+1, 0);
+  } else {
+    state.screen="finaleIntro";
+    render();
+  }
+}
+
+function renderFinaleIntro(){
+  var ck = lineup.finale;
+  var cat = CATEGORIES[ck];
+  var q = cat.finale;
+  var total = baseScore();
+  app.innerHTML =
+    '<div class="finale-badge">🔔 Last Call</div>'+
+    '<div class="wager-total">Tonight\'s category is<br><span style="font-family:\'Bungee\'; font-size:26px; color:var(--cream);">'+cat.icon+' '+cat.name+'</span></div>'+
+    '<div class="wager-total">You\'re walking in with <b>'+total+' pts</b>. Wager any amount — even zero.</div>'+
+    '<div class="wager-total" style="color:var(--tan); font-size:13px;">You\'ll need to name <b>'+q.need+'</b> correct answers. Get all '+q.need+' right to win your wager — fall short on even one, and you lose it all.</div>'+
+    '<div class="quick-bets">'+
+      '<button class="btn-secondary" onclick="quickBet(0)">No wager</button>'+
+      '<button class="btn-secondary" onclick="quickBet(Math.floor('+total+'/2))">Half tab</button>'+
+      '<button class="btn-secondary" onclick="quickBet('+total+')">All in</button>'+
+    '</div>'+
+    '<div class="wager-row"><input type="number" id="wagerInput" min="0" max="'+total+'" value="0"></div>'+
+    '<div id="wagerErr" class="err"></div>'+
+    '<button class="btn-tap" onclick="lockWager('+total+')">Lock in wager 🔒</button>';
+}
+
+function quickBet(v){
+  document.getElementById("wagerInput").value = v;
+}
+
+function lockWager(total){
+  var v = parseInt(document.getElementById("wagerInput").value || "0", 10);
+  if(isNaN(v) || v<0 || v>total){
+    document.getElementById("wagerErr").textContent = "Wager between 0 and "+total+" pts.";
+    return;
+  }
+  state.finale.wager = v;
+  state.screen="finaleQuestion";
+  render();
+}
+
+function renderFinaleQuestion(){
+  var ck = lineup.finale;
+  var cat = CATEGORIES[ck];
+  var q = cat.finale;
+  state.current = {catKey:ck, q:q, isFinale:true};
+  var inputs = "";
+  for(var i=0;i<q.need;i++){
+    inputs += '<input type="text" class="finale-input" id="finaleInput'+i+'" placeholder="Answer '+(i+1)+'">';
+  }
+  app.innerHTML =
+    '<div class="finale-badge">🔔 Last Call</div>'+
+    '<div class="ticket">'+
+      '<div class="pts-tag">'+cat.icon+' '+cat.name+' · wagered '+state.finale.wager+' pts</div>'+
+      '<div class="qtext">'+q.prompt+'</div>'+
+      '<div class="finale-inputs">'+inputs+'</div>'+
+      '<div id="finaleErr" class="err"></div>'+
+      '<button class="btn-tap" id="finaleSubmitBtn" onclick="submitFinale()">Lock in answers 🔒</button>'+
+      '<div id="qresult"></div>'+
+    '</div>';
+}
+
+function normalizeGuess(s){
+  return s.toLowerCase().trim().replace(/[^a-z0-9 ]/g,"");
+}
+
+function matchesGroup(guess, group){
+  var g = normalizeGuess(guess);
+  if(g.length<2) return false;
+  for(var i=0;i<group.length;i++){
+    var v = normalizeGuess(group[i]);
+    if(g===v) return true;
+    if(g.length>=3 && v.indexOf(g)!==-1) return true;
+    if(v.length>=3 && g.indexOf(v)!==-1) return true;
+  }
+  return false;
+}
+
+function submitFinale(){
+  var cur = state.current, q = cur.q;
+  var guesses = [];
+  for(var i=0;i<q.need;i++){
+    var val = document.getElementById("finaleInput"+i).value.trim();
+    if(val===""){
+      document.getElementById("finaleErr").textContent = "Fill in all "+q.need+" answers first.";
+      return;
+    }
+    guesses.push(val);
+  }
+  document.getElementById("finaleErr").textContent = "";
+  var usedGroups = q.answers.map(function(){ return false; });
+  var results = guesses.map(function(g){
+    for(var gi=0; gi<q.answers.length; gi++){
+      if(usedGroups[gi]) continue;
+      if(matchesGroup(g, q.answers[gi])){ usedGroups[gi]=true; return true; }
+    }
+    return false;
+  });
+  var correctCount = results.filter(function(r){return r;}).length;
+  state.finale.answered = true;
+  state.finale.correctCount = correctCount;
+  state.finale.correct = (correctCount === q.need);
+  for(var i=0;i<q.need;i++){
+    var el = document.getElementById("finaleInput"+i);
+    el.disabled = true;
+    el.classList.add(results[i] ? "correct" : "wrong");
+  }
+  document.getElementById("finaleSubmitBtn").disabled = true;
+  var fullList = q.answers.map(function(g){ return g[0]; }).join(", ");
+  var head = state.finale.correct
+    ? ("All "+q.need+" correct! 🍻")
+    : (correctCount+" of "+q.need+" correct — not quite enough to win the wager.");
+  document.getElementById("qresult").innerHTML =
+    '<div class="result-box '+(state.finale.correct?"right":"wrong")+'">'+head+
+      '<div class="fact">Full list: '+fullList+'. '+q.fact+'</div></div>'+
+    '<button class="btn-secondary" style="margin-top:12px;" onclick="goToEnd()">See my tab</button>';
+}
+
+function goToEnd(){
+  state.screen="end";
+  render();
+}
+
+function tierResultsString(idx){
+  var r = state.rounds[idx];
+  var out = "";
+  for(var i=0;i<3;i++){
+    var a = r.answered[i];
+    out += (a && a.correct) ? "✅" : "❌";
+  }
+  return out;
+}
+
+function tagline(score){
+  if(score>=45) return "Certified Pub Champion 🏆";
+  if(score>=28) return "Solid crawl — buy yourself a round 🍻";
+  if(score>=12) return "Middle of the pack, no shame in that 🍺";
+  return "Rough night — there's always tomorrow's crawl 🙃";
+}
+
+function renderEnd(){
+  var total = totalScore();
+  var ck = lineup.finale;
+  var cat = CATEGORIES[ck];
+  var need = cat.finale.need;
+  var shareText = "🍺 PUB CRAWL — Day #"+dayNumber+"\n"+
+    "My tab: "+total+" pts\n"+
+    "R1 "+CATEGORIES[lineup.round1].name+" "+tierResultsString(0)+"\n"+
+    "R2 "+CATEGORIES[lineup.round2].name+" "+tierResultsString(1)+"\n"+
+    "R3 "+CATEGORIES[lineup.round3].name+" "+tierResultsString(2)+"\n"+
+    "Last Call ("+cat.name+"): "+state.finale.correctCount+"/"+need+" correct — "+(state.finale.correct?"won":"lost")+" a "+state.finale.wager+"pt wager\n"+
+    tagline(total);
+  app.innerHTML =
+    '<div class="receipt">'+
+      '<div class="receipt-head">YOUR TAB</div>'+
+      '<div class="receipt-sub">PUB CRAWL · DAY #'+dayNumber+'</div>'+
+      '<div class="receipt-line"><span>Round 1 ('+CATEGORIES[lineup.round1].name+')</span><span>'+roundPtsEarned(0)+' pts</span></div>'+
+      '<div class="receipt-line"><span>Round 2 ('+CATEGORIES[lineup.round2].name+')</span><span>'+roundPtsEarned(1)+' pts</span></div>'+
+      '<div class="receipt-line"><span>Round 3 ('+CATEGORIES[lineup.round3].name+')</span><span>'+roundPtsEarned(2)+' pts</span></div>'+
+      '<div class="receipt-line"><span>Last Call ('+cat.name+') — '+state.finale.correctCount+'/'+need+'</span><span>'+(state.finale.correct?"+":"-")+state.finale.wager+' pts</span></div>'+
+      '<div class="receipt-total"><span>TOTAL</span><span>'+total+' pts</span></div>'+
+      '<div class="receipt-tag">'+tagline(total)+'</div>'+
+    '</div>'+
+    '<div class="btn-row">'+
+      '<button class="btn-secondary" style="flex:1;" onclick="copyTab()">📋 Copy my tab</button>'+
+      '<button class="btn-secondary" style="flex:1;" onclick="shareTab()">📤 Share</button>'+
+    '</div>'+
+    '<div class="copy-flash" id="copyFlash"></div>'+
+    '<textarea id="share-fallback" rows="6" readonly>'+shareText+'</textarea>';
+  window._shareText = shareText;
+}
+
+function roundPtsEarned(idx){
+  var r = state.rounds[idx], s=0;
+  Object.keys(r.answered).forEach(function(k){ if(r.answered[k].correct) s+=r.answered[k].pts; });
+  return s;
+}
+
+function copyTab(){
+  var text = window._shareText;
+  var flash = document.getElementById("copyFlash");
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      flash.textContent = "Copied! Paste it to your crew.";
+    }).catch(function(){
+      fallbackCopy(flash);
+    });
+  } else {
+    fallbackCopy(flash);
+  }
+}
+function fallbackCopy(flash){
+  var ta = document.getElementById("share-fallback");
+  ta.select();
+  try{ document.execCommand("copy"); flash.textContent = "Copied! Paste it to your crew."; }
+  catch(e){ flash.textContent = "Select the text below and copy manually."; }
+}
+function shareTab(){
+  var text = window._shareText;
+  if(navigator.share){
+    navigator.share({text:text}).catch(function(){});
+  } else {
+    copyTab();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
