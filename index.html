@@ -178,6 +178,15 @@
   }
   .finale-input.correct{ border-color:var(--teal); background:#0f2e29; color:var(--teal); }
   .finale-input.wrong{ border-color:var(--red); background:#2e0f16; color:var(--red-neon); }
+  .order-slots{ display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+  .order-slot{ background:var(--bg); border:2px dashed var(--border-blue); border-radius:6px; padding:10px 12px; font-size:14px; color:var(--tan); cursor:pointer; min-height:20px; }
+  .order-slot.filled{ color:var(--cream); border-style:solid; }
+  .order-slot.correct{ border-color:var(--teal); background:#0f2e29; color:var(--teal); }
+  .order-slot.wrong{ border-color:var(--red); background:#2e0f16; color:var(--red-neon); }
+  .order-pool{ display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+  .order-item{ background:var(--bg); border:2px solid var(--border-blue); border-radius:6px; padding:10px 12px; font-size:14px; color:var(--cream); text-align:left; }
+  .order-item:hover{ border-color:var(--blue-neon); }
+  .order-item:disabled{ opacity:0.35; cursor:default; }
   .quick-bets{ display:flex; gap:8px; margin-bottom:6px; }
   .quick-bets button{ flex:1; }
 
@@ -676,6 +685,40 @@ var FORCED_DAYS = [
       ],
       fact:"Navy's overlap is especially notable — Roger Staubach won the Heisman in 1963, and David Robinson won the Wooden Award in 1987."
     }
+  }},
+  { year:2026, month:8, day:22, content:{
+    round1:{ icon:"🌍", name:"Geography", theme:"Geography's Best-Kept Secrets", questions:[
+      {pts:2, type:"mc", q:"This country recognizes 11 official languages at the national level — more than any other nation on Earth.", options:["India","South Africa","Papua New Guinea","Switzerland"], answer:1, fact:"They include Zulu, Xhosa, Afrikaans, and English, among others — all with equal official status."},
+      {pts:4, type:"mc", q:"This African country is the only one on the continent never formally colonized by a European power, aside from a brief five-year occupation.", options:["Liberia","Ethiopia","Morocco","Namibia"], answer:1, fact:"That occupation was Italy's, from 1936 to 1941, during the Second Italo-Ethiopian War."},
+      {pts:6, type:"mc", q:"This country has more official time zones than any other nation on Earth — more even than Russia — thanks to its scattered overseas territories.", options:["Russia","United States","France","United Kingdom"], answer:2, fact:"France spans 12 time zones once territories like French Polynesia and French Guiana are counted."}
+    ]},
+    round2:{ icon:"🔤", name:"Word Trio", theme:"What word connects them?", questions:[
+      {pts:2, type:"text", q:"Sun, Moon, Star — what one word follows all three to make three common words?", answers:["Light"], fact:"Sunlight, moonlight, starlight — all real, all common."},
+      {pts:4, type:"text", q:"Home, Sea, Love — what one word follows all three to make three common words?", answers:["Sick"], fact:"Homesick, seasick, lovesick — three very different kinds of unwell."},
+      {pts:6, type:"text", q:"Cat, Star, Sword — what one word follows all three to make three common words?", answers:["Fish"], fact:"Catfish, starfish, swordfish — none of them are actually cats, stars, or swords."}
+    ]},
+    round3:{ icon:"🔬", name:"Science", theme:"Science History's Big Moments", questions:[
+      {pts:3, type:"mc", q:"This physicist's theory of general relativity was dramatically confirmed during a 1919 solar eclipse, when starlight was observed bending around the sun exactly as predicted.", options:["Isaac Newton","Albert Einstein","Niels Bohr","Arthur Eddington"], answer:1, fact:"Arthur Eddington was actually the astronomer who led the eclipse expedition that confirmed the theory — a tempting distractor, but not the theory's author."},
+      {pts:6, type:"mc", q:"This scientist remains the only person in history to win Nobel Prizes in two different sciences — Physics and Chemistry.", options:["Dorothy Hodgkin","Marie Curie","Rosalind Franklin","Lise Meitner"], answer:1, fact:"She's also still the only woman to win a Nobel Prize twice, in any fields."},
+      {pts:9, type:"mc", q:"This chemist, working with his graduate student Stanley Miller in the 1950s, attempted to recreate early Earth's atmosphere to show how life's building blocks could form from simple chemicals and electricity.", options:["Carl Sagan","Harold Urey","Louis Pasteur","J.B.S. Haldane"], answer:1, fact:"The famous result is usually just called the \"Miller experiment\" in shorthand, even though Urey was the senior scientist who proposed it."}
+    ]},
+    finale:{ icon:"🎮", name:"Gaming", topic:"Best-Selling Consoles of All Time",
+      prompt:"Name 6 of the 10 best-selling video game consoles of all time. Hint — the company breakdown: Nintendo (4), Sony (5), Microsoft (1).",
+      need:6, total:10,
+      answers:[
+        ["PlayStation 2","PS2"],
+        ["Nintendo Switch","Switch"],
+        ["Nintendo DS","DS"],
+        ["Game Boy","Game Boy Color","GBC","GB"],
+        ["PlayStation 4","PS4"],
+        ["PlayStation 1","PS1","PSX","PlayStation One","Original PlayStation"],
+        ["Wii","Nintendo Wii"],
+        ["PlayStation 3","PS3"],
+        ["Xbox 360"],
+        ["PlayStation 5","PS5"]
+      ],
+      fact:"The PlayStation 2 has held the #1 spot since 2000, but the Switch has closed the gap to just a few million units and could overtake it before the decade is out."
+    }
   }}
 ];
 
@@ -782,7 +825,7 @@ function renderStart(){
       '<div class="lineup-row"><span>Round 3 (harder)</span><span>'+rd3.icon+' '+rd3.name+' — '+rd3.theme+'</span></div>'+
       '<div class="rules">'+
         'Each round is one category, <b>3 questions</b> deep. Round 1 &amp; 2 are worth <b>2 / 4 / 6</b> points, Round 3 turns up the difficulty at <b>3 / 6 / 9</b>.<br>'+
-        'Then comes <b>Last Call</b> — a mystery category is revealed. Name enough correct answers and bank <b>5 pts each</b>, plus a <b>5 pt bonus</b> if you get every one right.'+
+        'Then comes <b>Last Call</b> — a mystery challenge is revealed. Every part you get right banks <b>5 pts</b>, plus a <b>5 pt bonus</b> for a perfect run.'+
       '</div>'+
     '</div>'+
     '<button class="btn-tap" onclick="startGame()">Start the crawl 🍻</button>';
@@ -853,6 +896,10 @@ function questionBodyHTML(q, gated){
       '<div id="mcOptions" class="hidden">'+opts+'</div>'+
       '<div id="qresult"></div>';
   }
+  if(q.type==="text"){
+    return '<div class="num-row"><input type="text" id="textAns" placeholder="Your answer"'+dis+'><button class="btn-secondary" id="textSubmitBtn" onclick="submitText()"'+dis+'>Submit answer</button></div>'+
+      '<div id="textErr" class="err"></div><div id="qresult"></div>';
+  }
   return '<div class="num-row"><input type="number" id="numAns" placeholder="Your guess"'+dis+'><button class="btn-secondary" id="numSubmitBtn" onclick="submitNum()"'+dis+'>Submit guess</button></div>'+
     '<div id="numErr" class="err"></div><div id="qresult"></div>';
 }
@@ -899,6 +946,11 @@ function chooseValue(v){
     bonusInput.disabled = false;
     document.getElementById("bonusSubmitBtn").disabled = false;
     document.getElementById("skipToMCBtn").disabled = false;
+  }
+  var textAns = document.getElementById("textAns");
+  if(textAns){
+    textAns.disabled = false;
+    document.getElementById("textSubmitBtn").disabled = false;
   }
 }
 
@@ -982,6 +1034,26 @@ function submitNum(){
   document.getElementById("qresult").innerHTML = factHTML(correct, String(q.answer), q.fact, note);
 }
 
+function submitText(){
+  var cur = state.current, q=cur.q;
+  if(pendingValue===null){
+    document.getElementById("valueErr").textContent = "Choose a point value first.";
+    return;
+  }
+  var val = document.getElementById("textAns").value.trim();
+  if(val===""){
+    document.getElementById("textErr").textContent = "Enter an answer first.";
+    return;
+  }
+  document.getElementById("textErr").textContent = "";
+  var correct = matchesGroup(val, q.answers);
+  recordAnswer(correct);
+  document.getElementById("textAns").disabled = true;
+  document.getElementById("textSubmitBtn").disabled = true;
+  var note = correct ? ("+"+pendingValue+" pts banked.") : ("You had "+pendingValue+" pts on this one — no points earned.");
+  document.getElementById("qresult").innerHTML = factHTML(correct, q.answers[0], q.fact, note);
+}
+
 function recordAnswer(correct, customPts){
   var cur = state.current;
   var r = state.rounds[cur.roundIdx];
@@ -1028,11 +1100,14 @@ function advanceAfterRound(){
 function renderFinaleIntro(){
   var q = todaysContent.finale;
   var total = baseScore();
+  var explainer = q.type==="order"
+    ? ("You\'ll need to put <b>"+q.need+"</b> events in the right order. Each one in its correct spot is worth <b>5 pts</b> — get all "+q.need+" right and bank a <b>5 pt bonus</b> on top.")
+    : ("You\'ll need to name <b>"+q.need+"</b> correct answers. Each correct one is worth <b>5 pts</b> — get all "+q.need+" right and bank a <b>5 pt bonus</b> on top.");
   app.innerHTML =
     '<div class="finale-badge">🔔 Last Call</div>'+
     '<div class="wager-total">Tonight\'s category is<br><span style="font-family:\'Bungee\'; font-size:26px; color:var(--cream);">'+q.icon+' '+q.name+'</span></div>'+
     '<div class="wager-total">Topic: <b>'+q.topic+'</b></div>'+
-    '<div class="wager-total" style="color:var(--tan); font-size:13px;">You\'ll need to name <b>'+q.need+'</b> correct answers. Each correct one is worth <b>5 pts</b> — get all '+q.need+' right and bank a <b>5 pt bonus</b> on top.</div>'+
+    '<div class="wager-total" style="color:var(--tan); font-size:13px;">'+explainer+'</div>'+
     '<div class="wager-total" style="font-size:13px;">Your tab so far: <b>'+total+' pts</b></div>'+
     '<button class="btn-tap" onclick="startFinaleQuestion()">Start Last Call 🔔</button>';
 }
@@ -1045,6 +1120,7 @@ function startFinaleQuestion(){
 function renderFinaleQuestion(){
   var q = todaysContent.finale;
   state.current = {q:q, isFinale:true};
+  if(q.type==="order"){ return renderOrderFinale(q); }
   var inputs = "";
   for(var i=0;i<q.need;i++){
     inputs += '<input type="text" class="finale-input" id="finaleInput'+i+'" placeholder="Answer '+(i+1)+'">';
@@ -1059,6 +1135,93 @@ function renderFinaleQuestion(){
       '<button class="btn-tap" id="finaleSubmitBtn" onclick="submitFinale()">Lock in answers 🔒</button>'+
       '<div id="qresult"></div>'+
     '</div>';
+}
+
+var orderState = null;
+
+function renderOrderFinale(q){
+  var slotsHTML = "";
+  for(var i=0;i<q.items.length;i++){
+    slotsHTML += '<div class="order-slot" id="slot'+i+'" onclick="unplaceSlot('+i+')">'+(i+1)+'.</div>';
+  }
+  var poolHTML = q.items.map(function(item,idx){
+    return '<button class="order-item" id="item'+idx+'" onclick="placeItem('+idx+')">'+item.text+'</button>';
+  }).join("");
+  app.innerHTML =
+    '<div class="finale-badge">🔔 Last Call</div>'+
+    '<div class="ticket">'+
+      '<div class="pts-tag">'+q.icon+' '+q.name+' · '+q.topic+'</div>'+
+      '<div class="qtext">'+q.prompt+'</div>'+
+      '<div class="confidence-label">Tap events below to fill in the slots, oldest first. Tap a filled slot to undo.</div>'+
+      '<div class="order-slots" id="orderSlots">'+slotsHTML+'</div>'+
+      '<div class="order-pool" id="orderPool">'+poolHTML+'</div>'+
+      '<div id="finaleErr" class="err"></div>'+
+      '<button class="btn-tap" id="finaleSubmitBtn" onclick="submitOrderFinale()" disabled>Lock in order 🔒</button>'+
+      '<div id="qresult"></div>'+
+    '</div>';
+  orderState = { placed: new Array(q.items.length).fill(null) };
+}
+
+function placeItem(itemIdx){
+  if(!orderState) return;
+  var el = document.getElementById("item"+itemIdx);
+  if(el.disabled) return;
+  var nextSlot = orderState.placed.indexOf(null);
+  if(nextSlot === -1) return;
+  orderState.placed[nextSlot] = itemIdx;
+  el.disabled = true;
+  el.classList.add("placed-item");
+  var q = todaysContent.finale;
+  var slotEl = document.getElementById("slot"+nextSlot);
+  slotEl.textContent = (nextSlot+1)+". "+q.items[itemIdx].text;
+  slotEl.classList.add("filled");
+  if(orderState.placed.indexOf(null) === -1){
+    document.getElementById("finaleSubmitBtn").disabled = false;
+  }
+}
+
+function unplaceSlot(slotIdx){
+  if(!orderState) return;
+  var itemIdx = orderState.placed[slotIdx];
+  if(itemIdx === null) return;
+  orderState.placed[slotIdx] = null;
+  var itemEl = document.getElementById("item"+itemIdx);
+  itemEl.disabled = false;
+  itemEl.classList.remove("placed-item");
+  var slotEl = document.getElementById("slot"+slotIdx);
+  slotEl.textContent = (slotIdx+1)+".";
+  slotEl.classList.remove("filled");
+  document.getElementById("finaleSubmitBtn").disabled = true;
+}
+
+function submitOrderFinale(){
+  var q = todaysContent.finale;
+  var correctCount = 0;
+  for(var i=0;i<orderState.placed.length;i++){
+    var itemIdx = orderState.placed[i];
+    var item = q.items[itemIdx];
+    var isRight = (item.correctRank === i+1);
+    if(isRight) correctCount++;
+    var slotEl = document.getElementById("slot"+i);
+    slotEl.classList.add(isRight ? "correct" : "wrong");
+  }
+  var allCorrect = (correctCount === q.items.length);
+  var earnedPts = correctCount*5 + (allCorrect ? 5 : 0);
+  state.finale.answered = true;
+  state.finale.correctCount = correctCount;
+  state.finale.correct = allCorrect;
+  state.finale.pts = earnedPts;
+  document.getElementById("finaleSubmitBtn").disabled = true;
+  var correctOrder = q.items.slice().sort(function(a,b){ return a.correctRank - b.correctRank; })
+    .map(function(it,i){ return (i+1)+". "+it.text; }).join(" ");
+  var head = allCorrect
+    ? ("Perfect order! +"+earnedPts+" pts (including the 5 pt perfect bonus) 🍻")
+    : (correctCount+" of "+q.items.length+" in the right spot — +"+earnedPts+" pts banked.");
+  document.getElementById("qresult").innerHTML =
+    '<div class="result-box '+(allCorrect?"right":(correctCount>0?"right":"wrong"))+'">'+head+
+      '<div class="fact">Correct order: '+correctOrder+' '+q.fact+'</div>'+
+    '</div>'+
+    '<button class="btn-secondary" style="margin-top:12px;" onclick="goToEnd()">See my tab</button>';
 }
 
 function normalizeGuess(s){
