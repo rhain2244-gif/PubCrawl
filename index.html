@@ -204,7 +204,16 @@
   .receipt-line{ display:flex; justify-content:space-between; border-bottom:1px dashed #b7ac97; padding:4px 0; }
   .receipt-total{ display:flex; justify-content:space-between; font-weight:700; font-size:16px; margin-top:10px; padding-top:8px; border-top:2px solid #241611; }
   .receipt-tag{ text-align:center; margin-top:14px; font-size:12px; font-style:italic; }
+  .receipt-shoutout{ text-align:center; margin-top:12px; padding-top:10px; border-top:1px dashed #b7ac97; font-size:11px; line-height:1.6; color:#5a5040; }
   .copy-flash{ text-align:center; font-size:13px; color:var(--teal); margin-top:8px; height:16px; }
+  .qa-recap{ margin-top:18px; }
+  .qa-recap-title{ font-family:'Bungee'; font-size:14px; color:var(--blue-neon); text-align:center; margin-bottom:10px; letter-spacing:1px; text-transform:uppercase; }
+  .qa-recap-item{ background:var(--panel); border:1px solid var(--panel-border-light); border-radius:6px; padding:10px 12px; margin-bottom:8px; }
+  .qa-recap-item.wrong{ border-color:var(--red); }
+  .qa-recap-item.right{ border-color:var(--teal); }
+  .qa-recap-q{ font-size:13px; color:var(--cream); line-height:1.5; margin-bottom:4px; }
+  .qa-recap-cat{ color:var(--tan); font-style:italic; }
+  .qa-recap-a{ font-size:12px; color:var(--tan); line-height:1.5; }
   textarea#share-fallback{
     width:100%; margin-top:10px; background:var(--bg2); color:var(--tan); border:1px solid var(--border-blue);
     border-radius:6px; padding:10px; font-family:'Space Mono'; font-size:12px;
@@ -719,6 +728,40 @@ var FORCED_DAYS = [
       ],
       fact:"The PlayStation 2 has held the #1 spot since 2000, but the Switch has closed the gap to just a few million units and could overtake it before the decade is out."
     }
+  }},
+  { year:2026, month:8, day:23, content:{
+    round1:{ icon:"🐾", name:"Animals", theme:"Household Pets & Curious Creatures", questions:[
+      {pts:2, type:"mc", q:"This cat breed, prized for its apparent hairlessness, actually still has a fine layer of downy hair — and needs regular bathing since it can't rely on fur to absorb its skin's natural oils.", options:["Sphynx","Devon Rex","Cornish Rex","Peterbald"], answer:0, fact:"Without a coat to soak up body oils, their skin can get noticeably greasy between baths."},
+      {pts:4, type:"mc", q:"This breed was the most popular dog in America for 31 consecutive years, until the French Bulldog dethroned it in 2022.", options:["Golden Retriever","Labrador Retriever","German Shepherd","Poodle"], answer:1, fact:"The French Bulldog has now held the top spot for four years running, as of the latest AKC rankings."},
+      {pts:6, type:"mc", q:"If dogs are canine, and cats are feline, what type of animal is vulpine?", options:["Foxes","Wolves","Otters","Weasels"], answer:0, fact:"\"Vulpine\" comes from vulpes, Latin for fox — easy to confuse with \"lupine\" (wolves), which trips up a lot of people."}
+    ]},
+    round2:{ icon:"🏰", name:"Disney Movies", theme:"Deep Cuts & Behind-the-Scenes", questions:[
+      {pts:2, type:"mc", q:"This 1940 Disney film, an anthology of animated segments set to classical music, was a box office failure on release but is now considered a landmark of the medium.", options:["Pinocchio","Fantasia","Bambi","Dumbo"], answer:1, fact:"It was originally conceived as a one-off showcase for Mickey Mouse in \"The Sorcerer's Apprentice\" before growing into a full anthology."},
+      {pts:4, type:"mc", q:"This 1961 Disney villain was originally conceived as a comic, bumbling role until a story artist reimagined her as genuinely menacing; animators studied real Dalmatians for weeks to prepare.", options:["Maleficent","Cruella","Ursula","Lady Tremaine"], answer:1, fact:"Voice actress Betty Lou Gerson reportedly based her performance partly on actress Tallulah Bankhead."},
+      {pts:6, type:"mc", q:"Johnny Depp has said he modeled Captain Jack Sparrow's swagger partly on Rolling Stones guitarist Keith Richards, and partly on this classic Looney Tunes skunk character known for his exaggerated, over-the-top romantic charm.", options:["Pepé Le Pew","Bugs Bunny","Foghorn Leghorn","Sylvester"], answer:0, fact:"Depp's take on Sparrow was reportedly so unconventional that Disney executives were initially worried he'd ruined the movie."}
+    ]},
+    round3:{ icon:"🍸", name:"Food & Drink", theme:"Alcohol, Straight Up", questions:[
+      {pts:3, type:"mc", q:"This smoky Mexican spirit, distilled from roasted agave hearts, is traditionally sold with a dead larva at the bottom of the bottle — a marketing gimmick unrelated to how the drink is actually made.", options:["Tequila","Mezcal","Sotol","Raicilla"], answer:1, fact:"The worm is a 20th-century American marketing invention and has nothing to do with traditional Mexican production methods."},
+      {pts:6, type:"mc", q:"This Irish cream liqueur, first produced in 1974, blends Irish whiskey with cream and remains one of the best-selling liqueurs in the world.", options:["Kahlúa","Baileys","Amarula","Carolans"], answer:1, fact:"It was one of the first cream-based liqueurs to solve the technical challenge of keeping cream shelf-stable without refrigeration."},
+      {pts:9, type:"mc", q:"This French aperitif, flavored with wormwood, was banned across the US and much of Europe in the early 1900s over claims it caused hallucinations and madness — a myth modern toxicology has since debunked.", options:["Chartreuse","Absinthe","Pernod","Vermouth"], answer:1, fact:"The bans were finally lifted in most countries starting in the early 2000s, once thujone levels were shown to be far too low to cause the effects once blamed on it."}
+    ]},
+    finale:{ icon:"🏆", name:"Sports", topic:"Highest Yards Per Carry Since the Merger",
+      prompt:"Name 6 of the 10 running backs with the highest career yards-per-carry average in NFL history since the 1970 AFL-NFL merger (minimum 750 attempts). Of these 10, 5 are active and 5 are retired — and only 1 is currently in the Pro Football Hall of Fame.",
+      need:6, total:10,
+      answers:[
+        ["Jamaal Charles","Charles"],
+        ["Mercury Morris","Morris"],
+        ["James Cook III","James Cook","Cook"],
+        ["Nick Chubb","Chubb"],
+        ["Raheem Mostert","Mostert"],
+        ["Barry Sanders","Sanders"],
+        ["Napoleon Kaufman","Kaufman"],
+        ["Jonathan Taylor","J. Taylor","Taylor"],
+        ["Derrick Henry","Henry"],
+        ["Aaron Jones","Aaron Jones Sr.","Jones"]
+      ],
+      fact:"Barry Sanders is the lone Hall of Famer on this list — inducted in 2004, first ballot, despite retiring abruptly in 1998 while still near his absolute peak. Active: James Cook III, Raheem Mostert, Jonathan Taylor, Derrick Henry, Aaron Jones. Retired: Jamaal Charles, Mercury Morris, Nick Chubb, Barry Sanders, Napoleon Kaufman."
+    }
   }}
 ];
 
@@ -867,7 +910,24 @@ function loadOnThisDay(){
   });
 }
 
+var questionLog = [];
+
+function stripHTML(s){
+  return String(s).replace(/<[^>]*>/g, "").trim();
+}
+
+function logQuestion(categoryLabel, questionText, yourAnswer, correctAnswer, correct){
+  questionLog.push({
+    category: categoryLabel,
+    question: stripHTML(questionText),
+    yourAnswer: yourAnswer,
+    correctAnswer: correctAnswer,
+    correct: correct
+  });
+}
+
 function startGame(){
+  questionLog = [];
   openQuestion(0,0);
 }
 
@@ -980,6 +1040,8 @@ function submitBonus(){
   document.getElementById("skipToMCBtn").disabled = true;
   var bonusPts = isCorrect ? pendingValue*2 : 0;
   recordAnswer(isCorrect, bonusPts);
+  var rd = todaysContent["round"+(cur.roundIdx+1)];
+  logQuestion(rd.name, q.q, val, correctText, isCorrect);
   var note = isCorrect
     ? ("Nailed it cold — +"+bonusPts+" pts banked (double!).")
     : ("No bonus this time — you had "+pendingValue+" pts on this one, and skipping to multiple choice would've still given you a shot at it. No points earned.");
@@ -1008,6 +1070,8 @@ function submitMC(i){
     else if(k===i) el.classList.add("wrong");
   }
   recordAnswer(correct);
+  var rd1 = todaysContent["round"+(cur.roundIdx+1)];
+  logQuestion(rd1.name, q.q, q.options[i], q.options[q.answer], correct);
   var note = correct ? ("+"+pendingValue+" pts banked.") : ("You had "+pendingValue+" pts on this one — no points earned.");
   document.getElementById("qresult").innerHTML = factHTML(correct, q.options[q.answer], q.fact, note);
 }
@@ -1030,6 +1094,8 @@ function submitNum(){
   recordAnswer(correct);
   document.getElementById("numAns").disabled = true;
   document.getElementById("numSubmitBtn").disabled = true;
+  var rd2 = todaysContent["round"+(cur.roundIdx+1)];
+  logQuestion(rd2.name, q.q, val, String(q.answer), correct);
   var note = correct ? ("+"+pendingValue+" pts banked.") : ("You had "+pendingValue+" pts on this one — no points earned.");
   document.getElementById("qresult").innerHTML = factHTML(correct, String(q.answer), q.fact, note);
 }
@@ -1050,6 +1116,8 @@ function submitText(){
   recordAnswer(correct);
   document.getElementById("textAns").disabled = true;
   document.getElementById("textSubmitBtn").disabled = true;
+  var rd3 = todaysContent["round"+(cur.roundIdx+1)];
+  logQuestion(rd3.name, q.q, val, q.answers[0], correct);
   var note = correct ? ("+"+pendingValue+" pts banked.") : ("You had "+pendingValue+" pts on this one — no points earned.");
   document.getElementById("qresult").innerHTML = factHTML(correct, q.answers[0], q.fact, note);
 }
@@ -1212,6 +1280,12 @@ function submitOrderFinale(){
   state.finale.correct = allCorrect;
   state.finale.pts = earnedPts;
   document.getElementById("finaleSubmitBtn").disabled = true;
+  for(var s=0;s<orderState.placed.length;s++){
+    var placedIdx = orderState.placed[s];
+    var placedItem = q.items[placedIdx];
+    var isRight2 = (placedItem.correctRank === s+1);
+    logQuestion("Finale — "+q.name, "Order slot #"+(s+1), placedItem.text, isRight2 ? placedItem.text : "wrong slot", isRight2);
+  }
   var correctOrder = q.items.slice().sort(function(a,b){ return a.correctRank - b.correctRank; })
     .map(function(it,i){ return (i+1)+". "+it.text; }).join(" ");
   var head = allCorrect
@@ -1293,6 +1367,9 @@ function submitFinale(){
     el.classList.add(results[i] ? "correct" : "wrong");
   }
   document.getElementById("finaleSubmitBtn").disabled = true;
+  for(var j=0;j<guesses.length;j++){
+    logQuestion("Finale — "+q.name, "Last Call answer #"+(j+1)+" ("+q.topic+")", guesses[j], results[j] ? guesses[j] : "no match found", results[j]);
+  }
   var fullList = q.answers.map(function(g){ return g[0]; }).join(", ");
   var head = allCorrect
     ? ("All "+q.need+" correct! +"+earnedPts+" pts (including the 5 pt perfect bonus) 🍻")
@@ -1348,13 +1425,28 @@ function renderEnd(){
       '<div class="receipt-line"><span>Last Call ('+q.name+') — '+state.finale.correctCount+'/'+need+'</span><span>+'+state.finale.pts+' pts</span></div>'+
       '<div class="receipt-total"><span>TOTAL</span><span>'+total+' pts</span></div>'+
       '<div class="receipt-tag">'+tagline(total)+'</div>'+
+      '<div class="receipt-shoutout">🏈 One for the road: shoutout to Nick Chubb, who announced his retirement this week after eight bruising, unforgettable seasons — 7,349 yards, a 5.0 career average, and a whole lot of tacklers who wish they'+"'"+'d taken a different angle. Enjoy retirement, Nick.</div>'+
     '</div>'+
     '<div class="btn-row">'+
       '<button class="btn-secondary" style="flex:1;" onclick="copyTab()">📋 Copy my tab</button>'+
       '<button class="btn-secondary" style="flex:1;" onclick="shareTab()">📤 Share</button>'+
     '</div>'+
     '<div class="copy-flash" id="copyFlash"></div>'+
-    '<textarea id="share-fallback" rows="6" readonly>'+shareText+'</textarea>';
+    '<textarea id="share-fallback" rows="6" readonly>'+shareText+'</textarea>'+
+    '<div class="qa-recap">'+
+      '<div class="qa-recap-title">📋 Every Question, Reviewed</div>'+
+      questionLog.map(function(entry, i){
+        var cls = entry.correct ? "right" : "wrong";
+        var mark = entry.correct ? "✅" : "❌";
+        var answerLine = entry.correct
+          ? ("Your answer: "+entry.yourAnswer)
+          : ("Your answer: "+entry.yourAnswer+" — correct answer: "+entry.correctAnswer);
+        return '<div class="qa-recap-item '+cls+'">'+
+            '<div class="qa-recap-q">'+(i+1)+'. '+mark+' <span class="qa-recap-cat">['+entry.category+']</span> '+entry.question+'</div>'+
+            '<div class="qa-recap-a">'+answerLine+'</div>'+
+          '</div>';
+      }).join("")+
+    '</div>';
   window._shareText = shareText;
 }
 
