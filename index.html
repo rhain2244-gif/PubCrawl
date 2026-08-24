@@ -131,6 +131,9 @@
   }
   .ticket .qtext{ font-size:17px; line-height:1.5; margin-bottom:16px; }
   .confidence-label{ font-size:13px; color:var(--tan); margin-bottom:8px; }
+  .whoami-note{ text-align:center; font-size:12px; color:var(--tan); font-style:italic; margin-bottom:8px; }
+  .whoami-timer{ text-align:center; font-family:'Space Mono',monospace; font-size:17px; color:var(--blue-neon); font-weight:700; margin-bottom:8px; }
+  .whoami-subject{ text-align:center; font-size:12px; color:var(--tan); text-transform:uppercase; letter-spacing:2px; margin-bottom:10px; }
   .value-row{ display:flex; gap:8px; }
   .value-btn{
     flex:1; padding:12px; border:2px solid var(--border-blue); background:var(--bg);
@@ -762,6 +765,74 @@ var FORCED_DAYS = [
       ],
       fact:"Barry Sanders is the lone Hall of Famer on this list — inducted in 2004, first ballot, despite retiring abruptly in 1998 while still near his absolute peak. Active: James Cook III, Raheem Mostert, Jonathan Taylor, Derrick Henry, Aaron Jones. Retired: Jamaal Charles, Mercury Morris, Nick Chubb, Barry Sanders, Napoleon Kaufman."
     }
+  }},
+  { year:2026, month:8, day:24, content:{
+    round1:{ icon:"🎸", name:"Music", theme:"2000s Rock", questions:[
+      {pts:2, type:"mc", q:"This duo's 2003 song \"Seven Nation Army\" is built around a signature riff played on a heavily distorted, downtuned guitar — the band never actually had a bassist.", options:["The White Stripes","The Black Keys","Kings of Leon","The Strokes"], answer:0, fact:"Frontman Jack White spent years letting people believe his bandmate Meg was his sister rather than his ex-wife."},
+      {pts:4, type:"mc", q:"On the 2004 mashup album \"Collision Course,\" Jay-Z remixed his song \"Encore\" together with this Linkin Park song, creating one of the era's most iconic rock/rap crossover tracks.", options:["In the End","Numb","Crawling","One Step Closer"], answer:1, fact:"The mashup, \"Numb/Encore,\" won a Grammy for Best Rap/Sung Collaboration in 2006."},
+      {pts:6, type:"mc", q:"These 2000s rock bands — Creed, Nickelback, and 3 Doors Down among them — have become the subject of a viral internet meme under this unfortunate collective nickname.", options:["Man Cave Rock","Divorced Dad Rock","Yacht Rock","Corporate Alt Rock"], answer:1, fact:"The meme leans into the bands' earnest, gravel-voiced angst reading as unintentionally funny to a generation that grew up mocking it on the radio."}
+    ]},
+    round2:{ icon:"🎭", name:"Who Am I", theme:"15 Seconds a Clue", whoAmI:true, questions:[
+      {subject:"Actor",
+        clues:[
+          {text:"I was discovered by a legendary arthouse film director in my native Spain before becoming a Hollywood star known for both swashbuckling action and voice acting.", pts:6},
+          {text:"I've played a masked Spanish swordsman on screen, and I voice an animated feline anti-hero with a fondness for dramatic monologues.", pts:4},
+          {text:"I starred as Zorro opposite Catherine Zeta-Jones, and I voice Puss in Boots in the Shrek franchise.", pts:2}
+        ],
+        answers:["Antonio Banderas","Banderas"],
+        fact:"Pedro Almodóvar gave him his first film role in Spain in 1982, long before Hollywood came calling."
+      },
+      {subject:"Musician",
+        clues:[
+          {text:"I'm a rising country artist from Alabama who dropped out of college to chase a music career in Nashville.", pts:6},
+          {text:"My 2024 duet with a fellow country star went viral and won Musical Event of the Year at the CMA Awards.", pts:4},
+          {text:"My duet \"You Look Like You Love Me,\" featuring Riley Green, made me one of country music's biggest new stars.", pts:2}
+        ],
+        answers:["Ella Langley","Langley"],
+        fact:"The song reportedly started as a joke after a songwriter asked about her dating life during a writing session."
+      },
+      {subject:"Athlete",
+        clues:[
+          {text:"I'm a two-time winner of my sport's top individual award, despite never winning a championship.", pts:6},
+          {text:"I ran an up-tempo offense as a point guard for a team based in the desert Southwest.", pts:4},
+          {text:"I won back-to-back NBA MVP awards with the Phoenix Suns, despite never reaching the Finals.", pts:2}
+        ],
+        answers:["Steve Nash","Nash"],
+        fact:"He later became a head coach in the NBA, taking over the Brooklyn Nets in 2020 despite having no prior coaching experience."
+      }
+    ]},
+    round3:{ icon:"🗺️", name:"Fictional Geography", theme:"Places That Don't Exist (But Feel Like They Do)", questions:[
+      {pts:3, type:"mc", q:"This fictional California city, a stand-in for Los Angeles, is the primary setting of a long-running crime video game franchise.", options:["Los Santos","Liberty City","Vice City","San Fierro"], answer:0, fact:"It first appeared as a smaller area within \"San Andreas\" before becoming the entire map of a later installment."},
+      {pts:6, type:"mc", q:"This fictional Rhode Island town, home to the Griffin family in a long-running animated sitcom, is also home to a fictional local beer called \"Pawtucket Patriot Ale.\"", options:["Arlen","Quahog","Springfield","South Park"], answer:1, fact:"The town is loosely based on North Providence and Cranston, Rhode Island, where the show's creator grew up."},
+      {pts:9, type:"mc", q:"This fictional Eastern European nation is the home turf of the Marvel supervillain Doctor Doom, who rules it as an absolute monarch.", options:["Sokovia","Genosha","Latveria","Symkaria"], answer:2, fact:"Doom is unusual among supervillains in that he's also, canonically, a legitimate head of state with diplomatic immunity."}
+    ]},
+    finale:{ icon:"🧇", name:"Food & Drink", topic:"Waffle House Hashbrown Code",
+      prompt:"It's National Waffle Day! At Waffle House, hashbrowns can be customized with a whole menu of code words. Name 6 of the 9 official ways to order them.",
+      need:6, total:9,
+      answers:[
+        ["Scattered"],
+        ["Smothered"],
+        ["Covered"],
+        ["Chunked"],
+        ["Diced"],
+        ["Peppered"],
+        ["Capped"],
+        ["Topped"],
+        ["Country"]
+      ],
+      breakdown:[
+        "Scattered — spread wide on the grill for extra crispiness",
+        "Smothered — with grilled onions",
+        "Covered — with melted American cheese",
+        "Chunked — with diced ham",
+        "Diced — with diced tomatoes",
+        "Peppered — with jalapeño peppers",
+        "Capped — with grilled mushrooms",
+        "Topped — with chili (Bert's Chili)",
+        "Country — with sausage gravy"
+      ],
+      fact:"National Waffle Day marks the anniversary of Cornelius Swartwout's 1869 US patent for the waffle iron — 157 years before this trivia question existed."
+    }
   }}
 ];
 
@@ -932,6 +1003,7 @@ function startGame(){
 }
 
 function openQuestion(roundIdx, qIndex){
+  clearInterval(whoAmITimer);
   var rd = todaysContent["round"+(roundIdx+1)];
   var q = rd.questions[qIndex];
   state.roundIdx = roundIdx;
@@ -969,6 +1041,7 @@ function renderQuestion(){
   var q = cur.q;
   var def = ROUND_DEFS[cur.roundIdx];
   var rd = todaysContent["round"+(cur.roundIdx+1)];
+  if(rd.whoAmI){ return renderWhoAmI(rd, cur); }
   var r = state.rounds[cur.roundIdx];
   var used = Object.keys(r.answered).map(function(k){ return r.answered[k].value; });
   var remaining = def.points.filter(function(v){ return used.indexOf(v)===-1; });
@@ -987,6 +1060,96 @@ function renderQuestion(){
       '<div class="qtext" style="margin-top:16px;">'+q.q+'</div>'+
       questionBodyHTML(q, true)+
     '</div>';
+}
+
+var whoAmITimer = null;
+var whoAmIState = null;
+
+function renderWhoAmI(rd, cur){
+  var q = rd.questions[cur.qIndex];
+  whoAmIState = { stage:0, stageRemaining:15, answered:false };
+  app.innerHTML =
+    '<div class="round-header"><span class="plank">'+ROUND_DEFS[cur.roundIdx].label+' · Who Am I? '+(cur.qIndex+1)+' of 3</span></div>'+
+    '<div class="cat-banner"><span class="ic">'+rd.icon+'</span>'+rd.name+'</div>'+
+    (rd.theme ? '<div class="theme-sub">'+rd.theme+'</div>' : '')+
+    '<div class="score-strip"><span>Your tab so far</span><span class="val">'+baseScore()+' pts</span></div>'+
+    '<div class="ticket">'+
+      '<div class="whoami-note">⏳ Each clue gets its own fresh 15 seconds — 45 seconds total across all three.</div>'+
+      '<div class="whoami-timer" id="whoamiTimer">⏱ 15s left on this clue — worth 6 pts</div>'+
+      '<div class="whoami-subject">'+q.subject+'</div>'+
+      '<div class="qtext" id="whoamiClue">'+q.clues[0].text+'</div>'+
+      '<div class="num-row"><input type="text" id="whoamiInput" placeholder="Who am I?"><button class="btn-secondary" id="whoamiSubmitBtn" onclick="submitWhoAmI()">Guess</button></div>'+
+      '<div id="whoamiErr" class="err"></div>'+
+      '<div id="qresult"></div>'+
+    '</div>';
+  startWhoAmITimer(q);
+}
+
+function startWhoAmITimer(q){
+  clearInterval(whoAmITimer);
+  whoAmITimer = setInterval(function(){ tickWhoAmI(q); }, 1000);
+}
+
+function tickWhoAmI(q){
+  if(!whoAmIState || whoAmIState.answered){ clearInterval(whoAmITimer); return; }
+  whoAmIState.stageRemaining--;
+  if(whoAmIState.stageRemaining <= 0){
+    if(whoAmIState.stage < 2){
+      whoAmIState.stage++;
+      whoAmIState.stageRemaining = 15;
+      var clueEl = document.getElementById("whoamiClue");
+      if(clueEl) clueEl.textContent = q.clues[whoAmIState.stage].text;
+    } else {
+      clearInterval(whoAmITimer);
+      timeUpWhoAmI(q);
+      return;
+    }
+  }
+  var timerEl = document.getElementById("whoamiTimer");
+  if(timerEl){
+    timerEl.textContent = "⏱ "+whoAmIState.stageRemaining+"s left on this clue — worth "+q.clues[whoAmIState.stage].pts+" pts";
+  }
+}
+
+function timeUpWhoAmI(q){
+  if(!whoAmIState || whoAmIState.answered) return;
+  whoAmIState.answered = true;
+  var inp = document.getElementById("whoamiInput");
+  if(inp) inp.disabled = true;
+  var btn = document.getElementById("whoamiSubmitBtn");
+  if(btn) btn.disabled = true;
+  pendingValue = null;
+  recordAnswer(false, 0);
+  var rd = todaysContent["round"+(state.current.roundIdx+1)];
+  logQuestion(rd.name, "Who am I? ("+q.subject+")", "(time ran out)", q.answers[0], false);
+  document.getElementById("qresult").innerHTML =
+    '<div class="result-box wrong">Time\'s up! It was <b>'+q.answers[0]+'</b>.<div class="fact">'+q.fact+'</div></div>'+
+    '<button class="btn-secondary" style="margin-top:12px;" onclick="afterQuestion()">Continue</button>';
+}
+
+function submitWhoAmI(){
+  if(!whoAmIState || whoAmIState.answered) return;
+  var rd = todaysContent["round"+(state.current.roundIdx+1)];
+  var q = rd.questions[state.current.qIndex];
+  var val = document.getElementById("whoamiInput").value.trim();
+  if(val===""){
+    document.getElementById("whoamiErr").textContent = "Type a guess first.";
+    return;
+  }
+  document.getElementById("whoamiErr").textContent = "";
+  var correct = matchesGroup(val, q.answers);
+  whoAmIState.answered = true;
+  clearInterval(whoAmITimer);
+  document.getElementById("whoamiInput").disabled = true;
+  document.getElementById("whoamiSubmitBtn").disabled = true;
+  var pts = correct ? q.clues[whoAmIState.stage].pts : 0;
+  pendingValue = null;
+  recordAnswer(correct, pts);
+  logQuestion(rd.name, "Who am I? ("+q.subject+")", val, q.answers[0], correct);
+  var note = correct
+    ? ("+"+pts+" pts banked — guessed with "+whoAmIState.stageRemaining+"s left on that clue.")
+    : "No points on this one.";
+  document.getElementById("qresult").innerHTML = factHTML(correct, q.answers[0], q.fact, note);
 }
 
 function chooseValue(v){
