@@ -833,6 +833,64 @@ var FORCED_DAYS = [
       ],
       fact:"National Waffle Day marks the anniversary of Cornelius Swartwout's 1869 US patent for the waffle iron — 157 years before this trivia question existed."
     }
+  }},
+  { year:2026, month:8, day:26, content:{
+    round1:{ icon:"🗺️", name:"Where Am I", theme:"20 Seconds a Clue", whoAmI:true, secondsPerClue:20, promptLabel:"Where am I?", questions:[
+      {subject:"Country",
+        clues:[
+          {text:"I'm the only country in Southeast Asia that was never formally colonized by a European power.", pts:6},
+          {text:"My capital city's full ceremonial name is recognized as the longest place name in the world, though locals just use a much shorter version.", pts:4},
+          {text:"I'm the country that gave the world Pad Thai, green curry, and tom yum soup.", pts:2}
+        ],
+        answers:["Thailand"],
+        fact:"Bangkok's full ceremonial name has 168 letters and is recognized by Guinness World Records as the longest place name on Earth."
+      },
+      {subject:"City",
+        clues:[
+          {text:"My name has become an English-language byword for an impossibly remote, hard-to-reach place — though I'm a real, still-inhabited city.", pts:6},
+          {text:"I was once a major center of Islamic scholarship and trans-Saharan trade, sitting on the southern edge of the world's largest hot desert.", pts:4},
+          {text:"I sit near the Niger River in the West African nation of Mali, and my name is often used in English as a joking stand-in for \"the middle of nowhere.\"", pts:2}
+        ],
+        answers:["Timbuktu","Tombouctou"],
+        fact:"Despite its reputation in English as a synonym for the middle of nowhere, it was once one of the wealthiest and most scholarly cities in the medieval world."
+      },
+      {subject:"Country",
+        clues:[
+          {text:"I'm the smallest sovereign country in South America, by both area and population.", pts:6},
+          {text:"My official language is Dutch, a holdover from European colonization, even though most people here don't speak it as a first language.", pts:4},
+          {text:"My capital, Paramaribo, is a UNESCO World Heritage city known for its distinct wooden colonial architecture.", pts:2}
+        ],
+        answers:["Suriname","Surinam"],
+        fact:"It's the only country in South America where Dutch is the official language, a legacy of Dutch colonial rule."
+      }
+    ]},
+    round2:{ icon:"🏆", name:"Sports", theme:"Hockey, Baseball & F1", questions:[
+      {pts:2, type:"mc", q:"This NHL forward became the fastest player in league history to reach 50 goals in a season, doing it in just 20 games during the 2023-24 season.", options:["Alex Ovechkin","Auston Matthews","Connor McDavid","Leon Draisaitl"], answer:1, fact:"He finished that season with 69 goals total, the most by any player in over 30 years."},
+      {pts:4, type:"mc", q:"This MLB franchise went from having one of the worst records in baseball the year before, to winning the American League pennant and reaching the World Series in 2008 — one of the most dramatic single-season turnarounds in league history.", options:["Colorado Rockies","Tampa Bay Rays","Arizona Diamondbacks","Cleveland Guardians"], answer:1, fact:"They'd lost 96 or more games in nine of their first ten seasons as a franchise before that pennant-winning year."},
+      {pts:6, type:"mc", q:"This Formula 1 team, formed in early 2009 from the ashes of a manufacturer's withdrawn works team, won both the Drivers' and Constructors' Championships in its only season of existence before being sold and rebranded the following year.", options:["Toyota F1","BAR Honda","Brawn GP","Super Aguri"], answer:2, fact:"It was sold to Mercedes-Benz at the end of 2009, becoming the Mercedes F1 team that still competes today."}
+    ]},
+    round3:{ icon:"📖", name:"Literature", theme:"Great American Authors", questions:[
+      {pts:3, type:"mc", q:"This American author wrote \"The Great Gatsby,\" capturing the excess and disillusionment of the Jazz Age.", options:["Ernest Hemingway","F. Scott Fitzgerald","John Steinbeck","William Faulkner"], answer:1, fact:"The novel sold poorly during his lifetime and only became widely celebrated decades after his death."},
+      {pts:6, type:"mc", q:"This American author's most personal novel reimagines the biblical story of Cain and Abel through two families in California's Salinas Valley, and he considered it his greatest work.", options:["William Faulkner","John Steinbeck","Ernest Hemingway","Cormac McCarthy"], answer:1, fact:"He grew up in that same valley, and the novel is partly a fictionalized account of his own family's history there."},
+      {pts:9, type:"mc", q:"This American author, known for stream-of-consciousness narration and the fictional Yoknapatawpha County, won the Nobel Prize in Literature in 1949.", options:["William Faulkner","John Steinbeck","F. Scott Fitzgerald","Cormac McCarthy"], answer:0, fact:"Nearly all of his major novels are set in that same fictional Mississippi county, modeled on the area where he actually lived."}
+    ]},
+    finale:{ icon:"🎬", name:"Movies", topic:"2000s Best Picture Winners",
+      prompt:"Name 7 of the 10 Best Picture Oscar winners from the 2000s (2000-2009).",
+      need:7, total:10,
+      answers:[
+        ["Gladiator"],
+        ["A Beautiful Mind"],
+        ["Chicago"],
+        ["The Lord of the Rings: The Return of the King","Return of the King","Lord of the Rings Return of the King"],
+        ["Million Dollar Baby"],
+        ["Crash"],
+        ["The Departed"],
+        ["No Country for Old Men"],
+        ["Slumdog Millionaire"],
+        ["The Hurt Locker"]
+      ],
+      fact:"The Hurt Locker's win made Kathryn Bigelow the first woman ever to win the Best Director Oscar — beating out her ex-husband James Cameron's \"Avatar\" that same year."
+    }
   }}
 ];
 
@@ -1067,18 +1125,20 @@ var whoAmIState = null;
 
 function renderWhoAmI(rd, cur){
   var q = rd.questions[cur.qIndex];
-  whoAmIState = { stage:0, stageRemaining:15, answered:false };
+  var spc = rd.secondsPerClue || 15;
+  var label = rd.promptLabel || "Who am I?";
+  whoAmIState = { stage:0, stageRemaining:spc, secondsPerClue:spc, label:label, answered:false };
   app.innerHTML =
-    '<div class="round-header"><span class="plank">'+ROUND_DEFS[cur.roundIdx].label+' · Who Am I? '+(cur.qIndex+1)+' of 3</span></div>'+
+    '<div class="round-header"><span class="plank">'+ROUND_DEFS[cur.roundIdx].label+' · '+label+' '+(cur.qIndex+1)+' of 3</span></div>'+
     '<div class="cat-banner"><span class="ic">'+rd.icon+'</span>'+rd.name+'</div>'+
     (rd.theme ? '<div class="theme-sub">'+rd.theme+'</div>' : '')+
     '<div class="score-strip"><span>Your tab so far</span><span class="val">'+baseScore()+' pts</span></div>'+
     '<div class="ticket">'+
-      '<div class="whoami-note">⏳ Each clue gets its own fresh 15 seconds — 45 seconds total across all three.</div>'+
-      '<div class="whoami-timer" id="whoamiTimer">⏱ 15s left on this clue — worth 6 pts</div>'+
+      '<div class="whoami-note">⏳ Each clue gets its own fresh '+spc+' seconds — '+(spc*3)+' seconds total across all three.</div>'+
+      '<div class="whoami-timer" id="whoamiTimer">⏱ '+spc+'s left on this clue — worth '+q.clues[0].pts+' pts</div>'+
       '<div class="whoami-subject">'+q.subject+'</div>'+
       '<div class="qtext" id="whoamiClue">'+q.clues[0].text+'</div>'+
-      '<div class="num-row"><input type="text" id="whoamiInput" placeholder="Who am I?"><button class="btn-secondary" id="whoamiSubmitBtn" onclick="submitWhoAmI()">Guess</button></div>'+
+      '<div class="num-row"><input type="text" id="whoamiInput" placeholder="'+label+'"><button class="btn-secondary" id="whoamiSubmitBtn" onclick="submitWhoAmI()">Guess</button></div>'+
       '<div id="whoamiErr" class="err"></div>'+
       '<div id="qresult"></div>'+
     '</div>';
@@ -1096,7 +1156,7 @@ function tickWhoAmI(q){
   if(whoAmIState.stageRemaining <= 0){
     if(whoAmIState.stage < 2){
       whoAmIState.stage++;
-      whoAmIState.stageRemaining = 15;
+      whoAmIState.stageRemaining = whoAmIState.secondsPerClue;
       var clueEl = document.getElementById("whoamiClue");
       if(clueEl) clueEl.textContent = q.clues[whoAmIState.stage].text;
     } else {
@@ -1121,7 +1181,7 @@ function timeUpWhoAmI(q){
   pendingValue = null;
   recordAnswer(false, 0);
   var rd = todaysContent["round"+(state.current.roundIdx+1)];
-  logQuestion(rd.name, "Who am I? ("+q.subject+")", "(time ran out)", q.answers[0], false);
+  logQuestion(rd.name, whoAmIState.label+" ("+q.subject+")", "(time ran out)", q.answers[0], false);
   document.getElementById("qresult").innerHTML =
     '<div class="result-box wrong">Time\'s up! It was <b>'+q.answers[0]+'</b>.<div class="fact">'+q.fact+'</div></div>'+
     '<button class="btn-secondary" style="margin-top:12px;" onclick="afterQuestion()">Continue</button>';
@@ -1145,7 +1205,7 @@ function submitWhoAmI(){
   var pts = correct ? q.clues[whoAmIState.stage].pts : 0;
   pendingValue = null;
   recordAnswer(correct, pts);
-  logQuestion(rd.name, "Who am I? ("+q.subject+")", val, q.answers[0], correct);
+  logQuestion(rd.name, whoAmIState.label+" ("+q.subject+")", val, q.answers[0], correct);
   var note = correct
     ? ("+"+pts+" pts banked — guessed with "+whoAmIState.stageRemaining+"s left on that clue.")
     : "No points on this one.";
