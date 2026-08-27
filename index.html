@@ -891,6 +891,40 @@ var FORCED_DAYS = [
       ],
       fact:"The Hurt Locker's win made Kathryn Bigelow the first woman ever to win the Best Director Oscar — beating out her ex-husband James Cameron's \"Avatar\" that same year."
     }
+  }},
+  { year:2026, month:8, day:27, content:{
+    round1:{ icon:"⚡", name:"Mythology", theme:"Gods, Curses & Punishments", questions:[
+      {pts:2, type:"mc", q:"This one-eyed Norse god, ruler of Asgard, is said to have traded his other eye for a single drink from a well of wisdom.", options:["Odin","Thor","Tyr","Heimdall"], answer:0, fact:"The well belonged to the being Mimir, and Odin is said to still consult Mimir's severed, preserved head for counsel."},
+      {pts:4, type:"mc", q:"In Egyptian mythology, this goddess of magic resurrected her husband Osiris after he was murdered and dismembered by his brother Set.", options:["Nephthys","Isis","Hathor","Bastet"], answer:1, fact:"She's often depicted with a throne-shaped headdress, since her name is linked to the hieroglyph for \"throne.\""},
+      {pts:6, type:"mc", q:"In Greek mythology, this king was condemned by the gods to eternally push a boulder up a hill, only for it to roll back down each time just before he reached the top — punishment for his deceitfulness in life.", options:["Tantalus","Ixion","Sisyphus","Prometheus"], answer:2, fact:"His name gave rise to the English word \"sisyphean,\" describing a task that's endless and ultimately pointless."}
+    ]},
+    round2:{ icon:"🎮", name:"Video Games", theme:"Origins & Firsts", questions:[
+      {pts:2, type:"mc", q:"This 1996 id Software game is credited with popularizing online multiplayer \"deathmatch\" gameplay, building on the FPS genre established by the studio's earlier hit, Doom.", options:["Quake","Half-Life","Unreal","GoldenEye 007"], answer:0, fact:"Its engine was also one of the first to popularize true 3D environments, rather than the pseudo-3D tricks earlier shooters relied on."},
+      {pts:4, type:"mc", q:"This video game character was originally named \"Jumpman\" before Nintendo renamed him after the landlord of their Seattle-area warehouse.", options:["Mario","Luigi","Donkey Kong","Wario"], answer:0, fact:"The landlord's real name was Mario Segale, and he reportedly only found out about the connection years later."},
+      {pts:6, type:"mc", q:"This puzzle game, created in 1984 by Soviet software engineer Alexey Pajitnov, became one of the first pieces of software ever exported from the USSR to the West.", options:["Tetris","Minesweeper","Pipe Dream","Klax"], answer:0, fact:"Pajitnov didn't receive any royalties from the game's massive early success, since it was developed on Soviet state-owned computers."}
+    ]},
+    round3:{ icon:"🚀", name:"Space & Astronomy", theme:"Missions & Milestones", questions:[
+      {pts:3, type:"mc", q:"This NASA program, consisting of two probes launched in 1977 to study the outer planets, has produced the two most distant human-made objects from Earth — one of which became the first spacecraft to enter interstellar space, in 2012.", options:["Voyager","Pioneer","New Horizons","Cassini"], answer:0, fact:"Both probes carry a \"Golden Record\" with sounds and images meant to represent life on Earth to any intelligent life that might one day find them."},
+      {pts:6, type:"mc", q:"This astronomer's 1610 observations of Jupiter's four largest moons provided key evidence against the geocentric model of the universe.", options:["Galileo Galilei","Johannes Kepler","Nicolaus Copernicus","Tycho Brahe"], answer:0, fact:"Those four moons are still called the \"Galilean moons\" in his honor."},
+      {pts:9, type:"mc", q:"This NASA program, which achieved six crewed Moon landings between 1969 and 1972, suffered a devastating launch pad fire in 1967 that killed all three astronauts aboard during a routine test, delaying crewed missions by nearly two years.", options:["Apollo","Gemini","Mercury","Artemis"], answer:0, fact:"The fire led to a full redesign of the spacecraft's hatch and cabin materials before crewed flights resumed."}
+    ]},
+    finale:{ icon:"🎬", name:"Movies", topic:"Star Wars Planets",
+      prompt:"Name 6 of the 10 most-visited planets across the Star Wars films — based on which planets appear across the most separate films and shows in the saga.",
+      need:6, total:10,
+      answers:[
+        ["Tatooine"],
+        ["Coruscant"],
+        ["Naboo"],
+        ["Dagobah"],
+        ["Endor"],
+        ["Kamino"],
+        ["Geonosis"],
+        ["Hoth"],
+        ["Mustafar"],
+        ["Kashyyyk"]
+      ],
+      fact:"Tatooine and Coruscant are the two most recurring settings in the saga, each appearing across nearly every era of Star Wars storytelling — from the prequels through the original trilogy to modern streaming shows."
+    }
   }}
 ];
 
@@ -1421,6 +1455,7 @@ function renderFinaleQuestion(){
     '<div class="ticket">'+
       '<div class="pts-tag">'+q.icon+' '+q.name+' · '+q.topic+'</div>'+
       '<div class="qtext">'+q.prompt+'</div>'+
+      '<div class="whoami-note">💡 Don\'t sweat exact spelling — close guesses count.</div>'+
       '<div class="finale-inputs">'+inputs+'</div>'+
       '<div id="finaleErr" class="err"></div>'+
       '<button class="btn-tap" id="finaleSubmitBtn" onclick="submitFinale()">Lock in answers 🔒</button>'+
