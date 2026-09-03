@@ -1187,6 +1187,94 @@ var FORCED_DAYS = [
       fact:"This roster completed the largest comeback in NBA Finals history, rallying from a 3-1 series deficit against a 73-win Golden State Warriors team to win Cleveland's first ever championship."
     }
   }}
+,
+  { year:2026, month:9, day:4, content:{
+    round1:{ icon:"🎸", name:"Music", theme:"Song, Artist & Album", questions:[
+      {pts:2, type:"mc", q:"This progressive rock band's 1969 debut album, \"In the Court of the Crimson King,\" is considered one of the founding albums of the entire prog rock genre, and features cover art depicting a screaming face.", options:["King Crimson","Yes","Genesis","Emerson, Lake & Palmer"], answer:0, fact:"The screaming face on the cover has become one of the most recognizable and frequently referenced album covers in rock history."},
+      {pts:4, type:"mc", q:"This 1971 song, running over 8 minutes long, is widely interpreted as an allegory for the 1959 plane crash that killed Buddy Holly, Ritchie Valens, and The Big Bopper — an event the song itself calls \"the day the music died.\"", options:["American Pie","Bohemian Rhapsody","Stairway to Heaven","Hotel California"], answer:0, fact:"The songwriter has famously refused for decades to explain the song's many cryptic lyrics in detail, saying he prefers to let listeners interpret them."},
+      {pts:6, type:"mc", q:"This 1973 Pink Floyd album, exploring themes of conflict, greed, and mental illness, spent over 900 weeks on the Billboard charts.", options:["The Dark Side of the Moon","The Wall","Wish You Were Here","Animals"], answer:0, fact:"That chart run lasted nearly 15 consecutive years, one of the longest of any album in history."}
+    ]},
+    round2:{ icon:"🎭", name:"Who Am I", theme:"20 Seconds a Clue", whoAmI:true, secondsPerClue:20, promptLabel:"Who am I?", questions:[
+      {subject:"Actor",
+        clues:[
+          {text:"I'm a man born in 1956. I've won two consecutive Best Actor Oscars, a feat only accomplished by one other actor in history.", pts:6},
+          {text:"I've played a stranded FedEx employee and a World War II soldier searching for a missing man's family.", pts:4},
+          {text:"I won Oscars for \"Philadelphia\" and \"Forrest Gump,\" and I'm known for \"Cast Away\" and \"Saving Private Ryan.\"", pts:2}
+        ],
+        answers:["Tom Hanks"],
+        fact:"The only other actor to win back-to-back Best Actor Oscars is Spencer Tracy, who did it in 1938 and 1939."
+      },
+      {subject:"Musician",
+        clues:[
+          {text:"I'm a woman born in 1981. I hold the record for most Grammy wins of any artist in history.", pts:6},
+          {text:"I was the lead singer of a girl group before launching an even more successful solo career.", pts:4},
+          {text:"I'm known for hits like \"Single Ladies\" and \"Crazy in Love,\" and I was previously in Destiny's Child.", pts:2}
+        ],
+        answers:["Beyoncé","Beyonce"],
+        fact:"She surpassed conductor Georg Solti's longstanding record for most career Grammy wins."
+      },
+      {subject:"Athlete",
+        clues:[
+          {text:"I'm a man born in 1942. I was initially known by a name I later called my \"slave name,\" before adopting a new one after converting to a new faith.", pts:6},
+          {text:"I was stripped of my professional title for several years during my athletic prime over a controversial personal stance, though the decision was later overturned by the Supreme Court.", pts:4},
+          {text:"I'm a heavyweight boxing champion, born Cassius Clay, known for my rivalry with Joe Frazier, including a fight billed as the \"Thrilla in Manila.\"", pts:2}
+        ],
+        answers:["Muhammad Ali"],
+        fact:"His conviction for draft evasion was unanimously overturned by the Supreme Court in 1971, clearing the way for his boxing comeback."
+      }
+    ]},
+    round3:{ icon:"🎬", name:"Movies", theme:"Classics & Crime", questions:[
+      {pts:3, type:"mc", q:"This 1939 film, based on a novel by Margaret Mitchell, is set against the Civil War and Reconstruction in Georgia, and held the record for highest-grossing film (inflation-adjusted) for decades.", options:["Gone with the Wind","Giant","The Alamo","Raintree County"], answer:0, fact:"Adjusted for inflation, it's still often cited as the single highest-grossing film of all time."},
+      {pts:6, type:"mc", q:"This 1999 sci-fi film asks its protagonist to choose between a red pill and a blue pill, revealing that the world he knows is actually a simulated reality.", options:["The Matrix","Inception","Total Recall","Dark City"], answer:0, fact:"Its iconic \"bullet time\" visual effect required a rig of dozens of still cameras firing in rapid sequence around the actor."},
+      {pts:9, type:"mc", q:"This 1995 heist film, featuring an ensemble cast, is famous for a lengthy bank heist shootout filmed in downtown Los Angeles that required extensive coordination with the LAPD due to the sheer volume of blank gunfire used.", options:["Heat","The Usual Suspects","Reservoir Dogs","Point Break"], answer:0, fact:"Real SWAT and military veterans were brought in to train the cast so the gunplay would look authentic rather than like typical movie shooting."}
+    ]},
+    finale:{ icon:"🏆", name:"Movies", topic:"Multiple Oscar-Winning Actors",
+      prompt:"Name 4 of the 8 actors who have won 3 or more competitive Academy Awards for acting.",
+      need:4, total:8,
+      answers:[
+        ["Katharine Hepburn"],
+        ["Walter Brennan"],
+        ["Ingrid Bergman"],
+        ["Jack Nicholson"],
+        ["Meryl Streep"],
+        ["Daniel Day-Lewis","Daniel Day Lewis"],
+        ["Frances McDormand"],
+        ["Sean Penn"]
+      ],
+      fact:"Katharine Hepburn is the only person on this list with four acting Oscars — everyone else has exactly three. Sean Penn is the newest member, joining the club at the 2026 ceremony."
+    }
+  }},
+  { year:2026, month:9, day:5, content:{
+    round1:{ icon:"📺", name:"TV Shows", theme:"Behind the Scenes", questions:[
+      {pts:2, type:"mc", q:"This animated sitcom's opening sequence has featured a different, unique gag involving its family's living room furniture in nearly every one of its 700+ episodes, a tradition that began in its second season.", options:["The Simpsons","Family Guy","King of the Hill","American Dad"], answer:0, fact:"That recurring gag has become one of the most analyzed and celebrated running jokes in television history."},
+      {pts:4, type:"mc", q:"This sitcom had such poor first-season ratings that NBC nearly cancelled it — but reruns airing during a 1990 newspaper strike, when readers lost access to printed TV listings, helped it build the audience that ultimately saved it.", options:["Seinfeld","Cheers","Frasier","Friends"], answer:0, fact:"It went on to become one of the most successful and influential sitcoms in television history, despite nearly not making it past its first season."},
+      {pts:6, type:"mc", q:"This crime drama's creator spent over two decades writing for established shows like \"The Rockford Files\" before finally getting his own original vision greenlit in his 50s.", options:["The Sopranos","The Wire","Breaking Bad","Mad Men"], answer:0, fact:"That creator, David Chase, has said the show was heavily influenced by his own therapy sessions and complicated relationship with his mother."}
+    ]},
+    round2:{ icon:"🏆", name:"Sports", theme:"Records & Legends", questions:[
+      {pts:2, type:"mc", q:"This is the only player in World Cup history to score in five consecutive editions of the tournament, spanning from 2006 to 2022.", options:["Cristiano Ronaldo","Lionel Messi","Neymar","Kylian Mbappé"], answer:0, fact:"He accomplished this despite playing in five World Cups across a 16-year span, an unusually long international career at the sport's highest level."},
+      {pts:4, type:"mc", q:"This horse won the 1973 Triple Crown, including a Belmont Stakes victory by 31 lengths — still the largest margin of victory in the race's history.", options:["Secretariat","Seabiscuit","Man o' War","American Pharoah"], answer:0, fact:"His final Belmont time also set a world record for the 1.5-mile distance that remains unbroken today."},
+      {pts:6, type:"mc", q:"This country has won the most gold medals in Winter Olympics history, despite a population of under 6 million.", options:["Norway","Germany","United States","Russia"], answer:0, fact:"Winter sports are deeply embedded in the country's culture, partly thanks to its long, snowy winters and mountainous terrain."}
+    ]},
+    round3:{ icon:"🍜", name:"Food & Drink", theme:"Around the World", questions:[
+      {pts:3, type:"mc", q:"This fermented soybean paste, a staple of Japanese cuisine, is used to make a traditional soup often served at the start of a meal.", options:["Miso","Tofu","Tempeh","Natto"], answer:0, fact:"The fermentation process can take anywhere from a few weeks to several years, with longer fermentation producing a darker, more intense flavor."},
+      {pts:6, type:"mc", q:"This drink, combining strong drip-brewed coffee with sweetened condensed milk, became popular in a Southeast Asian country partly as a workaround for the region's historical lack of access to fresh dairy.", options:["Vietnamese Coffee","Thai Iced Coffee","Turkish Coffee","Cuban Coffee"], answer:0, fact:"Condensed milk was originally used because fresh milk spoiled quickly in the region's tropical climate before refrigeration was widely available."},
+      {pts:9, type:"mc", q:"This pufferfish dish, considered a delicacy in Japan, must be prepared by specially licensed chefs due to a lethal neurotoxin present in the fish's organs.", options:["Fugu","Unagi","Uni","Ikura"], answer:0, fact:"The neurotoxin has no known antidote, and chefs must train for years and pass rigorous licensing exams before being allowed to serve it."}
+    ]},
+    finale:{ icon:"🏅", name:"Sports", topic:"Multi-Time Olympic Host Countries",
+      prompt:"Name 5 of the 7 countries that have hosted the Summer Olympics more than once.",
+      need:5, total:7,
+      answers:[
+        ["United States","USA","US"],
+        ["United Kingdom","UK","Great Britain"],
+        ["France"],
+        ["Germany"],
+        ["Greece"],
+        ["Australia"],
+        ["Japan"]
+      ],
+      fact:"Greece was fittingly the first repeat host, bringing the Olympics back to Athens in 2004, exactly 108 years after hosting the first modern Games there in 1896."
+    }
+  }}
 ];
 
 function findForcedDay(){
