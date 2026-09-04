@@ -1455,11 +1455,20 @@ function openQuestion(roundIdx, qIndex){
   render();
 }
 
+function shuffledOptionOrder(q){
+  var seed = (dateSeed*97) + (state.current.roundIdx+1)*131 + (state.current.qIndex+1)*17 + q.options.length;
+  var rng = mulberry32(seed);
+  var indices = [];
+  for(var i=0;i<q.options.length;i++) indices.push(i);
+  return seededShuffle(indices, rng);
+}
+
 function questionBodyHTML(q, gated){
   var dis = gated ? " disabled" : "";
   if(q.type==="mc"){
-    var opts = q.options.map(function(opt,i){
-      return '<button class="opt-btn" id="opt'+i+'" onclick="submitMC('+i+')" disabled>'+opt+'</button>';
+    var order = shuffledOptionOrder(q);
+    var opts = order.map(function(origIdx){
+      return '<button class="opt-btn" id="opt'+origIdx+'" onclick="submitMC('+origIdx+')" disabled>'+q.options[origIdx]+'</button>';
     }).join("");
     return '<div id="bonusArea">'+
         '<div class="confidence-label" style="margin-top:0;">Know it outright? Type your answer for <b>double points</b> — or play it safe with multiple choice.</div>'+
